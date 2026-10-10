@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>body{margin:0}</style>
+<title>Six-Day Recomp Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: gym-floor card. Sticky day strip on top, one day at a time, exercise cards stacked; days color-coded like Olympic bumper plates (Push red, Pull blue, Legs amber). */
+:root{
+  --bg:#F2F3F1; --surface:#FFFFFF; --fg:#17191C; --muted:#5D636B; --line:#DADDE0;
+  --push:#C8302B; --pull:#1F56C4; --legs:#C98A00; --rest:#2E8B57;
+  --chip:#E7E9EC; --done:#2E8B57;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111315; --surface:#1A1D20; --fg:#ECEEF0; --muted:#9AA1A9; --line:#2C3035;
+  --push:#F0625C; --pull:#6E9BFF; --legs:#F2B630; --rest:#4CC38A; --chip:#24282C; --done:#4CC38A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111315; --surface:#1A1D20; --fg:#ECEEF0; --muted:#9AA1A9; --line:#2C3035;
+  --push:#F0625C; --pull:#6E9BFF; --legs:#F2B630; --rest:#4CC38A; --chip:#24282C; --done:#4CC38A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 120px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:2.4rem;font-weight:800;letter-spacing:.01em;text-transform:uppercase}
+h2{font-size:1.9rem;font-weight:800;text-transform:uppercase}
+h3{font-size:1.3rem;font-weight:700}
+.lede{color:var(--muted);margin:.4rem 0 0;max-width:60ch}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+a{color:inherit}
+
+nav.days{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:12px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.days::-webkit-scrollbar{display:none}
+nav.days button{flex:0 0 auto;min-width:58px;border:0;border-radius:10px;padding:8px 10px;background:var(--chip);color:var(--fg);font-family:var(--display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;border-bottom:4px solid var(--c,var(--muted))}
+nav.days button small{font-family:var(--body);font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.04em}
+nav.days button[aria-selected="true"]{background:var(--c,var(--fg));color:#fff}
+nav.days button[aria-selected="true"] small{color:#fff;opacity:.85}
+nav.days button:focus-visible,.btn:focus-visible,.set:focus-visible{outline:3px solid var(--c,var(--pull));outline-offset:2px}
+
+.dayhead{display:grid;gap:8px;padding-block:22px 6px}
+.dayhead h2{color:var(--c)}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--chip);color:var(--fg)}
+
+.block{margin-top:22px;display:grid;gap:12px}
+.block > .eyebrow{display:flex;justify-content:space-between;align-items:baseline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px;min-width:0}
+.card.is-done{border-color:var(--done)}
+.ex-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ex-top h3{min-width:0}
+.dose{font-family:var(--mono);font-size:.95rem;white-space:nowrap;color:var(--c);font-variant-numeric:tabular-nums;text-align:right}
+.dose span{display:block;font-size:.75rem;color:var(--muted)}
+ol.cues{margin:0;padding-left:1.2rem;display:grid;gap:3px}
+.avoid{font-size:.92rem;color:var(--muted)}
+.avoid b{color:var(--push)}
+.alt{font-size:.9rem;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:10px;padding:9px 13px;font:600 .92rem var(--body);text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--c);border-color:var(--c);color:#fff}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+.sets{display:flex;flex-wrap:wrap;gap:6px}
+.set{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted);font:600 .9rem var(--mono);cursor:pointer}
+.set[aria-pressed="true"]{background:var(--done);border-color:var(--done);color:#fff}
+
+.plain{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.plain ul,.plain ol{margin:.3rem 0 0;padding-left:1.2rem;display:grid;gap:4px}
+.guide section{margin-top:26px;display:grid;gap:12px}
+.guide p{margin:0;max-width:65ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--display);font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.calc label{display:grid;gap:4px;font-weight:600;font-size:.9rem}
+.calc input{font:500 1.1rem var(--mono);padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:100%}
+.stat{background:var(--chip);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font:500 1.25rem var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted)}
+.note{border-left:4px solid var(--legs);padding:10px 14px;background:var(--surface);border-radius:0 10px 10px 0}
+
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--fg);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;align-items:center;gap:14px}
+.timer b{font:500 1.8rem var(--mono);font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:center}
+.timer button{border:0;border-radius:10px;padding:9px 14px;font:600 .9rem var(--body);background:var(--bg);color:var(--fg);cursor:pointer}
+.timer.zero b{color:var(--legs)}
+.ph{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ph figure{margin:0;position:relative;min-width:0}
+.ph img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:10px;background:var(--chip)}
+.ph figcaption{position:absolute;left:6px;top:6px;font:700 .7rem var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:2px 7px;border-radius:6px}
+.credit{font-size:.8rem}
+html.print nav.days,html.print .timer,html.print .rest-btn,html.print #reset{display:none!important}
+html.print .wrap{max-width:none;padding-block:0}
+html.print .btn.primary::after{content:" ▸"}
+html.print body{background:#fff;font-size:12.5px;line-height:1.4}
+html.print h2{font-size:1.6rem} html.print h3{font-size:1.1rem}
+html.print .dayhead{padding-block:4px 0;gap:4px}
+html.print .eyebrow{break-after:avoid}
+html.print .ex-top{gap:8px}
+html.print .btn{padding:4px 9px;font-size:.8rem}
+html.print .plain{padding:10px 12px}
+html.print .lede{max-width:none}
+html.print .avoid,html.print .alt{font-size:.95em}
+html.print .guide section{margin-top:14px}
+html.print .pday + .pday{break-before:page}
+html.print .block,html.print .guide section{display:block}
+html.print .block > * + *,html.print .guide section > * + *{margin-top:10px}
+html.print .card{break-inside:avoid;display:grid;grid-template-columns:250px 1fr;column-gap:14px;row-gap:4px;padding:10px;align-content:start}
+html.print .card > *{grid-column:2}
+html.print .card > .ph{grid-column:1;grid-row:1 / span 7;align-self:start}
+html.print .set{width:26px;height:26px;font-size:.75rem}
+html.print .block{gap:8px;margin-top:14px}
+html.print .plain,html.print .tbl,html.print .note{break-inside:avoid}
+html.print .guide section{break-inside:avoid-page}
+@page{size:A4;margin:12mm}
+.foot{margin-top:30px;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">179 cm · 89 kg start · 6 days · 60–75 min · no supplements</div>
+    <h1>Six-Day Recomp Plan</h1>
+    <p class="lede">Lose belly fat and build muscle at the same time. Pick today's day, follow the cards top to bottom, tap a circle after each set, and open the video when you're unsure of a move.</p>
+    <p><a class="btn" href="Six-Day-Recomp-Plan.pdf" target="_blank" rel="noopener">Download PDF</a></p>
+  </header>
+
+  <nav class="days" id="days" role="tablist" aria-label="Choose a day"></nav>
+  <main id="view"></main>
+  <p class="foot">Video buttons open a YouTube search for that exercise's form tutorial. Pick a short video from a trainer channel (Jeff Nippard, Renaissance Periodization, ScottHermanFitness, Athlean-X all have clear ones). Exercise photos: free-exercise-db (public domain). Check with a doctor before starting if you have a heart, back, knee or blood-pressure issue. Stop any exercise that causes sharp pain.</p>
+</div>
+
+<div class="timer" id="timer" hidden>
+  <span>Rest</span><b id="tleft">1:30</b>
+  <button type="button" id="tadd">+30s</button>
+  <button type="button" id="tstop">Done</button>
+</div>
+
+<script>
+const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q + " proper form tutorial");
+const IMG = q => "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q + " exercise form");
+
+const E = (n, sets, reps, rest, cues, avoid, alt, q) => ({n, sets, reps, rest, cues, avoid, alt, q: q || n});
+
+const WARM_UP = {
+  upper: ["5 min easy bike, rower or treadmill", "Arm circles, 10 each direction", "Band pull-aparts ×15 (or light face pulls)", "Push-ups ×10", "Ramp-up sets on your first lift: 50% ×10, 70% ×5, 85% ×2"],
+  lower: ["5 min easy bike or treadmill", "Bodyweight squats ×15", "Leg swings ×10 each leg, front-back and side-side", "Glute bridges ×15", "Ramp-up sets on your first lift: 50% ×10, 70% ×5, 85% ×2"]
+};
+
+const DAYS = [
+ { id:"mon", d:"Mon", tag:"Push A", type:"push", title:"Push A · Chest & Shoulders", time:"60–75 min", warm:"upper",
+   main:[
+    E("Barbell Bench Press",4,"6–8",150,["Squeeze shoulder blades back and down, feet flat on the floor","Lower the bar to mid-chest with elbows about 45° from your body","Press up and slightly back toward your face, without bouncing"],"Bouncing the bar off your chest, flaring elbows straight out","Dumbbell bench press"),
+    E("Seated Dumbbell Shoulder Press",3,"8–10",90,["Bench almost upright, back flat against the pad","Start with dumbbells at ear level, palms forward","Press up until arms are straight, then lower slowly"],"Arching your lower back off the bench","Machine shoulder press"),
+    E("Incline Dumbbell Press",3,"8–12",90,["Bench at about 30°","Lower dumbbells to the upper chest until you feel a stretch","Press up and in, without clanking the weights"],"Bench set too steep, which turns it into a shoulder press","Incline machine press"),
+    E("Cable Lateral Raise",3,"12–15 /side",60,["Stand side-on to the cable, handle at hip","Raise out to the side, leading with the elbow, to shoulder height","Take 2–3 seconds to lower"],"Swinging the body or shrugging the shoulders up","Dumbbell lateral raise"),
+    E("Triceps Rope Pushdown",3,"10–12",60,["Elbows pinned to your sides","Push down and spread the rope at the bottom","Let the rope rise only until forearms are parallel to the floor"],"Elbows drifting forward, leaning your body weight into it","Straight-bar pushdown"),
+    E("Overhead Dumbbell Triceps Extension",2,"12",60,["Hold one dumbbell with both hands overhead","Elbows point forward, lower behind your head for a deep stretch","Extend to straight arms"],"Elbows flaring wide","Overhead cable extension")
+   ],
+   core:[
+    E("Plank",3,"30–60 s",45,["Forearms under shoulders, body in a straight line","Squeeze glutes and brace like someone will poke your stomach","Breathe steadily"],"Hips sagging or piking up","Knee plank to start"),
+    E("Dead Bug",3,"10 /side",45,["Lie on your back, arms up, knees at 90°","Press lower back into the floor","Lower opposite arm and leg slowly, then switch"],"Lower back lifting off the floor","Single-leg dead bug")
+   ],
+   cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h. Don't hold the rails."
+ },
+ { id:"tue", d:"Tue", tag:"Pull A", type:"pull", title:"Pull A · Back Width & Biceps", time:"60–75 min", warm:"upper",
+   main:[
+    E("Lat Pulldown",4,"8–10",90,["Grip slightly wider than shoulders, thighs locked under the pad","Chest up, pull the bar to your upper chest by driving elbows down","Let the bar rise slowly until arms are straight"],"Leaning far back, pulling behind the neck","Assisted pull-up machine"),
+    E("Barbell Bent-Over Row",3,"8–10",120,["Hinge forward to about 45°, back flat, knees soft","Pull the bar to your lower ribs","Squeeze shoulder blades together at the top, lower under control"],"Jerking the weight up with your hips, rounding your back","Chest-supported machine row or T-bar row"),
+    E("Seated Cable Row",3,"10–12",90,["Sit tall, slight bend in knees","Pull handle to your belly button, squeeze shoulder blades","Reach forward for a stretch without rounding your back"],"Rocking back and forth to move the weight","Machine row"),
+    E("Face Pull",3,"15",60,["Rope set at eye level","Pull toward your face, hands ending beside your ears","Thumbs point back at the end"],"Going too heavy; this is a light posture exercise","Band face pull"),
+    E("Dumbbell Biceps Curl",3,"10–12",60,["Elbows stay at your sides","Curl up, turning palms toward the ceiling","Take 2–3 seconds to lower"],"Swinging your back to lift the weight","EZ-bar curl"),
+    E("Hammer Curl",2,"12",60,["Palms face each other throughout","Curl to shoulder height","Lower slowly"],"Elbows moving forward","Rope cable hammer curl")
+   ],
+   core:[
+    E("Hanging Knee Raise",3,"10–15",60,["Hang from the bar, shoulders active","Curl knees up toward your chest, tilting the pelvis","Lower slowly without swinging"],"Using momentum to swing","Lying leg raise or captain's chair knee raise")
+   ],
+   cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
+ },
+ { id:"wed", d:"Wed", tag:"Legs A", type:"legs", title:"Legs A · Squat Strength", time:"60–75 min", warm:"lower",
+   main:[
+    E("Barbell Back Squat",4,"6–8",150,["Bar on upper back, feet shoulder-width, toes slightly out","Big breath, brace your stomach, sit down between your heels","Knees follow your toes; go to thighs parallel or lower if your back stays neutral"],"Heels lifting, knees caving inward, rounding at the bottom","Hack squat or goblet squat"),
+    E("Romanian Deadlift",3,"8–10",120,["Soft knees, push your hips straight back","Keep the bar touching your thighs as it lowers","Stop when you feel a strong hamstring stretch, then drive hips forward"],"Rounding the back, turning it into a squat","Dumbbell Romanian deadlift"),
+    E("Leg Press",3,"10–12",90,["Feet mid-platform, shoulder-width","Lower until knees are about 90°","Press up without locking the knees; lower back stays on the pad"],"Lowering so deep that your hips curl off the seat",""),
+    E("Lying Leg Curl",3,"12",60,["Pad just above your heels","Curl up fully, pause 1 second","Lower slowly"],"Hips lifting off the bench","Seated leg curl"),
+    E("Standing Calf Raise",4,"12–15",60,["Balls of feet on the edge","Drop heels for a full stretch, pause 1 second","Rise as high as possible and squeeze"],"Bouncing through short reps","Calf raise on leg press")
+   ],
+   core:[
+    E("Cable Crunch",3,"12–15",60,["Kneel facing the cable, rope beside your head","Crunch your ribs toward your hips","Hips stay still; your spine does the curling"],"Sitting back on your heels to pull with arms","Weighted floor crunch")
+   ],
+   cardio:"Easy bike, 10 min, as a cool-down."
+ },
+ { id:"thu", d:"Thu", tag:"Push B", type:"push", title:"Push B · Shoulders & Triceps", time:"60–75 min", warm:"upper",
+   main:[
+    E("Standing Overhead Press",4,"6–8",150,["Bar resting on upper chest, grip just outside shoulders","Squeeze glutes and stomach, press straight up","Move your head back slightly, then through once the bar passes"],"Leaning back to turn it into a standing bench press","Seated dumbbell shoulder press","barbell overhead press"),
+    E("Flat Dumbbell Bench Press",3,"8–10",120,["Shoulder blades pinned back","Lower until dumbbells are level with your chest","Press up, ending with dumbbells over your shoulders"],"Dropping the weights too fast at the bottom","Machine chest press"),
+    E("Chest Dip",3,"8–12",90,["Lean your body slightly forward","Lower until shoulders are just below elbows","Press back up without locking hard"],"Going too deep if your shoulders hurt","Assisted dip machine or push-ups"),
+    E("Dumbbell Lateral Raise",4,"12–15",60,["Slight bend in elbows, small forward lean","Raise out to the sides to shoulder height","Lower slowly over 2–3 seconds"],"Swinging and shrugging","Cable lateral raise"),
+    E("Cable Chest Fly",3,"12–15",60,["Pulleys at chest height, small step forward","Soft bend in elbows, bring hands together like hugging a tree","Open slowly until you feel a chest stretch"],"Bending arms into a press","Pec deck machine"),
+    E("EZ-Bar Skull Crusher",3,"10–12",60,["Lie on a bench, arms angled slightly back","Bend only at the elbows, lowering the bar toward your forehead","Extend back to the start"],"Elbows flaring out","Dumbbell skull crusher","ez bar skull crusher")
+   ],
+   core:[
+    E("Side Plank",3,"30 s /side",45,["Elbow under shoulder, feet stacked","Lift hips into a straight line","Hold without sagging"],"Hips drifting back","Side plank on knees")
+   ],
+   cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
+ },
+ { id:"fri", d:"Fri", tag:"Pull B", type:"pull", title:"Pull B · Deadlift & Back Thickness", time:"60–75 min", warm:"lower",
+   main:[
+    E("Conventional Deadlift",3,"5",180,["Bar over mid-foot, shins touching the bar","Hinge down, flat back, chest up, take the slack out of the bar","Push the floor away and keep the bar dragging up your legs; finish by squeezing glutes"],"Rounding your back, yanking the bar, leaning back at the top","Trap-bar deadlift"),
+    E("Pull-Up",3,"6–10",120,["Start from a dead hang, palms facing away","Pull your chest toward the bar","Lower all the way under control"],"Half reps and kicking","Assisted pull-up machine or band-assisted pull-up"),
+    E("One-Arm Dumbbell Row",3,"10 /side",90,["One hand and knee on a bench, back flat","Pull the dumbbell toward your hip","Let it hang for a full stretch at the bottom"],"Twisting your torso to lift","Single-arm cable row"),
+    E("Rear Delt Fly",3,"15",60,["Use the reverse pec deck or bend over with light dumbbells","Arms slightly bent, sweep out to the sides","Squeeze for 1 second at the back"],"Going heavy and using momentum","Reverse pec deck"),
+    E("Incline Dumbbell Curl",3,"10",60,["Bench at 45–60°, arms hanging straight down","Curl without moving your upper arm","Full stretch at the bottom"],"Shoulders rolling forward","Standing dumbbell curl"),
+    E("Cable Curl",2,"12–15",60,["Elbows at your sides","Curl up and squeeze","Lower slowly"],"Leaning back","Band curl")
+   ],
+   core:[
+    E("Ab Wheel Rollout",3,"8–10",60,["Kneel, hands on the wheel under your shoulders","Roll forward only as far as you can keep your back flat","Pull back using your abs"],"Lower back sagging","Plank walkouts")
+   ],
+   cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
+ },
+ { id:"sat", d:"Sat", tag:"Legs B", type:"legs", title:"Legs B · Glutes, Lunges & Conditioning", time:"60–75 min", warm:"lower",
+   main:[
+    E("Bulgarian Split Squat",3,"8–10 /leg",90,["Back foot on a bench, front foot about 2 feet forward","Drop the back knee straight down","Push through the front heel to stand"],"Front knee caving in, wobbling (hold something for balance at first)","Reverse lunge"),
+    E("Barbell Hip Thrust",3,"10",90,["Upper back on a bench, bar padded over your hips","Chin tucked, drive hips up until body is flat","Squeeze glutes hard for 1 second at the top"],"Arching your lower back instead of using glutes","Glute bridge machine or dumbbell hip thrust"),
+    E("Walking Lunges",3,"20 steps",90,["Long step, both knees bend to about 90°","Upright torso","Push through the front heel into the next step"],"Short steps that put all the load on the knees","Stationary lunges"),
+    E("Leg Extension",3,"12–15",60,["Pad on lower shins, knees in line with the machine pivot","Straighten fully and squeeze 1 second","Lower slowly"],"Kicking the weight up",""),
+    E("Seated Calf Raise",3,"15–20",60,["Pad on lower thighs","Full stretch at the bottom","Rise high and squeeze"],"Short bouncing reps","Standing calf raise")
+   ],
+   core:[
+    E("Reverse Crunch",3,"12–15",45,["Lie on your back, knees bent at 90°","Curl your hips off the floor toward your chest","Lower slowly"],"Swinging the legs","Lying knee tuck")
+   ],
+   cardio:"Bike intervals, 10 rounds: 20 s hard, 40 s easy (10 min total). Then 5 min easy."
+ },
+ { id:"sun", d:"Sun", tag:"Rest", type:"rest", title:"Rest & Recover", time:"30–60 min, optional", rest:true,
+   main:[
+    E("Hip Flexor Stretch",2,"45 s /side",0,["Half-kneeling, squeeze the glute of the back leg","Shift hips forward slightly","Keep the torso upright"],"Arching the lower back","","kneeling hip flexor stretch"),
+    E("Lying Hamstring Stretch",2,"45 s /side",0,["Lie on your back, loop a towel or band around one foot","Straighten that leg up toward the ceiling","Pull gently until you feel the back of the thigh stretch"],"Lifting your hips or bending the knee a lot",""),
+    E("Stick Chest & Shoulder Stretch",2,"10 slow reps",0,["Hold a broomstick, towel or band with a wide grip","Keep arms straight and lift it overhead, then back as far as is comfortable","Return slowly; widen your grip if it feels tight"],"Bending the elbows or forcing past a pinch",""),
+    E("Cat-Cow",1,"10 slow reps",0,["On hands and knees","Round your back up, then let it sink","Move with your breathing"],"Rushing",""),
+    E("Child's Pose",1,"60 s",0,["Knees wide, sit back toward heels","Arms stretched forward","Breathe into your back"],"",""),
+   ],
+   core:[],
+   cardio:"Walk 8,000–10,000 steps. Total rest is fine too. Rest is when muscle actually gets built."
+ }
+];
+
+const PHOTO = {"Barbell Bench Press": "Barbell_Bench_Press_-_Medium_Grip", "Seated Dumbbell Shoulder Press": "Dumbbell_Shoulder_Press", "Incline Dumbbell Press": "Incline_Dumbbell_Press", "Cable Lateral Raise": "Side_Lateral_Raise", "Triceps Rope Pushdown": "Triceps_Pushdown_-_Rope_Attachment", "Overhead Dumbbell Triceps Extension": "Standing_Dumbbell_Triceps_Extension", "Plank": "Plank", "Dead Bug": "Dead_Bug", "Lat Pulldown": "Wide-Grip_Lat_Pulldown", "Barbell Bent-Over Row": "Bent_Over_Barbell_Row", "Seated Cable Row": "Seated_Cable_Rows", "Face Pull": "Face_Pull", "Dumbbell Biceps Curl": "Dumbbell_Bicep_Curl", "Hammer Curl": "Hammer_Curls", "Hanging Knee Raise": "Hanging_Leg_Raise", "Barbell Back Squat": "Barbell_Squat", "Romanian Deadlift": "Romanian_Deadlift", "Leg Press": "Leg_Press", "Lying Leg Curl": "Lying_Leg_Curls", "Standing Calf Raise": "Rocking_Standing_Calf_Raise", "Cable Crunch": "Cable_Crunch", "Standing Overhead Press": "Standing_Military_Press", "Flat Dumbbell Bench Press": "Dumbbell_Bench_Press", "Chest Dip": "Dips_-_Chest_Version", "Dumbbell Lateral Raise": "Side_Lateral_Raise", "Cable Chest Fly": "Cable_Crossover", "EZ-Bar Skull Crusher": "EZ-Bar_Skullcrusher", "Side Plank": "Side_Bridge", "Conventional Deadlift": "Barbell_Deadlift", "Pull-Up": "Pullups", "One-Arm Dumbbell Row": "One-Arm_Dumbbell_Row", "Rear Delt Fly": "Reverse_Flyes", "Incline Dumbbell Curl": "Incline_Dumbbell_Curl", "Cable Curl": "Standing_Biceps_Cable_Curl", "Ab Wheel Rollout": "Ab_Roller", "Bulgarian Split Squat": "Split_Squats", "Barbell Hip Thrust": "Barbell_Hip_Thrust", "Walking Lunges": "Bodyweight_Walking_Lunge", "Leg Extension": "Leg_Extensions", "Seated Calf Raise": "Seated_Calf_Raise", "Reverse Crunch": "Reverse_Crunch", "Hip Flexor Stretch": "Kneeling_Hip_Flexor", "Cat-Cow": "Cat_Stretch", "Child's Pose": "Childs_Pose", "Stick Chest & Shoulder Stretch": "Chest_And_Front_Of_Shoulder_Stretch", "Lying Hamstring Stretch": "Hamstring_Stretch"};
+const PHOTO_NOTE = {"Cable Lateral Raise": "Photo shows the dumbbell version; the movement is the same.", "Bulgarian Split Squat": "Photo shows a split squat. For the Bulgarian version, rest your back foot on a bench.", "Walking Lunges": "Photo shows one lunge step; keep walking forward.", "Standing Calf Raise": "Can be done with a barbell, dumbbells or the calf machine."};
+const COLOR = {push:"var(--push)", pull:"var(--pull)", legs:"var(--legs)", rest:"var(--rest)"};
+const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M21 16l-5-5-8 8"/></svg>';
+const ICON_TIMER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>';
+
+const store = {
+  get(k, f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let done = store.get("sdr-done", {});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtRest = s => s >= 60 ? (s % 60 ? `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")} min` : `${s/60} min`) : `${s} s`;
+
+function photo(ex){
+  const id = PHOTO[ex.n];
+  if (!id) return "";
+  const f = (n, cap) => `<figure><img src="ex/${id}_${n}.jpg" alt="${esc(ex.n)}, ${cap.toLowerCase()} position" loading="lazy" width="480" height="320"><figcaption>${cap}</figcaption></figure>`;
+  return `<div class="ph">${f(0,"Start")}${f(1,"Finish")}</div>${PHOTO_NOTE[ex.n] ? `<div class="alt">${esc(PHOTO_NOTE[ex.n])}</div>` : ""}`;
+}
+
+function card(dayId, ex, i){
+  const key = `${dayId}-${i}`;
+  const got = done[key] || [];
+  const sets = Array.from({length: ex.sets}, (_, s) =>
+    `<button type="button" class="set" data-k="${key}" data-s="${s}" aria-pressed="${got.includes(s)}" aria-label="Set ${s+1} done">${s+1}</button>`).join("");
+  const complete = got.length === ex.sets;
+  return `<article class="card${complete ? " is-done" : ""}" id="c-${key}">
+    <div class="ex-top"><h3>${esc(ex.n)}</h3>
+      <div class="dose">${ex.sets} × ${esc(ex.reps)}${ex.rest ? `<span>rest ${fmtRest(ex.rest)}</span>` : ""}</div></div>
+    ${photo(ex)}
+    <ol class="cues">${ex.cues.map(c => `<li>${esc(c)}</li>`).join("")}</ol>
+    ${ex.avoid ? `<div class="avoid"><b>Avoid:</b> ${esc(ex.avoid)}</div>` : ""}
+    ${ex.alt ? `<div class="alt">Machine busy? Swap for <b>${esc(ex.alt)}</b>.</div>` : ""}
+    <div class="row">
+      <a class="btn primary" href="${YT(ex.q)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
+      ${ex.rest ? `<button type="button" class="btn rest-btn" data-rest="${ex.rest}">${ICON_TIMER}Rest timer</button>` : ""}
+    </div>
+    <div class="sets" aria-label="Sets completed">${sets}</div>
+  </article>`;
+}
+
+function renderDay(day){
+  const v = document.getElementById("view");
+  v.style.setProperty("--c", COLOR[day.type]);
+  v.innerHTML = dayHTML(day);
+}
+function dayHTML(day){
+  const warm = day.warm ? `<section class="block"><div class="eyebrow"><span>Warm-up · 8–10 min</span></div>
+      <div class="plain"><ol>${WARM_UP[day.warm].map(w => `<li>${esc(w)}</li>`).join("")}</ol></div></section>` : "";
+  const mainList = day.main.map((e,i) => card(day.id, e, i)).join("");
+  const coreList = day.core.map((e,i) => card(day.id, e, 100+i)).join("");
+  const totalSets = [...day.main, ...day.core].reduce((a,e) => a + e.sets, 0);
+  return `
+    <div class="dayhead"><div class="eyebrow">${day.d}</div><h2>${esc(day.title)}</h2>
+      <div class="meta"><span class="pill">${day.time}</span>${day.rest ? "" : `<span class="pill">${totalSets} working sets</span><span class="pill">${day.main.length + day.core.length} exercises</span>`}</div>
+      ${day.rest ? "" : `<div class="meta"><span class="pill">Warm-up 10</span><span class="pill">Weights 40–45</span><span class="pill">Core 5</span><span class="pill">Cardio ${day.type==="legs" ? "10–15" : "15"} min</span></div>`}</div>
+    ${warm}
+    <section class="block"><div class="eyebrow"><span>${day.rest ? "Stretch routine · 10 min" : "Main lifts"}</span><button type="button" class="btn" id="reset">Clear ticks</button></div>${mainList}</section>
+    ${coreList ? `<section class="block"><div class="eyebrow"><span>Core</span></div>${coreList}</section>` : ""}
+    <section class="block"><div class="eyebrow"><span>${day.rest ? "Activity" : "Cardio · finish here"}</span></div><div class="plain">${esc(day.cardio)}</div></section>`;
+}
+
+function renderGuide(){
+  const v = document.getElementById("view");
+  v.style.setProperty("--c", "var(--pull)");
+  v.innerHTML = guideHTML();
+  bindCalc();
+}
+function guideHTML(){
+  return `<div class="guide">
+  <div class="dayhead"><div class="eyebrow">Read once, then check weekly</div><h2>How the plan works</h2></div>
+
+  <section><h3>The week</h3>
+    <div class="tbl"><table><thead><tr><th>Day</th><th>Session</th><th>Cardio</th></tr></thead><tbody>
+    ${DAYS.map(d => `<tr><td>${d.d}</td><td>${esc(d.title)}</td><td>${d.type==="rest" ? "8–10k steps" : d.type==="legs" ? (d.id==="sat" ? "10 min intervals" : "10 min easy") : "15 min incline walk"}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p>Push / Pull / Legs, twice a week. Every muscle gets trained twice, which is the sweet spot for building muscle. Weights build and protect muscle; the cardio and food control the fat loss.</p>
+  </section>
+
+  <section><h3>About belly fat</h3>
+    <div class="note">You can't burn fat from one spot. Crunches build the abs underneath, but the fat on top comes off when your whole body loses fat. That means: a calorie deficit, enough protein, daily steps and sleep. Track your waist, not just your weight.</div>
+  </section>
+
+  <section><h3>12-week progression</h3>
+    <div class="tbl"><table><thead><tr><th>Weeks</th><th>Phase</th><th>What to do</th></tr></thead><tbody>
+      <tr><td class="n">1–2</td><td>Learn</td><td>Pick weights you could lift 3–4 more reps with. Focus on form. Ask a gym trainer to watch your squat and deadlift once.</td></tr>
+      <tr><td class="n">3–8</td><td>Build</td><td>Stop each set 1–2 reps before you'd fail. Add weight using the rule below.</td></tr>
+      <tr><td class="n">9</td><td>Deload</td><td>Same exercises, 2 sets each, about 10% lighter. Lets joints recover.</td></tr>
+      <tr><td class="n">10–12</td><td>Push</td><td>Keep progressing. Add 5 min to each cardio session if you have time left (stay under 75 min total).</td></tr>
+    </tbody></table></div>
+    <p><b>The rule for adding weight:</b> each exercise has a rep range, like 8–10. When you hit the top of the range (10) on every set with good form, increase the weight next time: about 2.5 kg on presses and rows, 5 kg on squats and deadlifts, the next dumbbell up on smaller lifts. Write your weights in your phone notes.</p>
+  </section>
+
+  <section><h3>Your daily targets</h3>
+    <div class="plain" style="display:grid;gap:12px">
+      <div class="calc">
+        <label for="bw">Body weight (kg)<input id="bw" type="number" inputmode="decimal" min="35" max="200" value="89"></label>
+        <div class="stat"><b id="kcal">–</b><span>calories / day to start</span></div>
+        <div class="stat"><b id="prot">–</b><span>protein / day</span></div>
+        <div class="stat"><b id="water">–</b><span>water / day</span></div>
+      </div>
+      <p style="color:var(--muted);font-size:.9rem">Starting estimate for someone training 6 days a week, about 400–500 calories below maintenance. Adjust using your waist: if it hasn't dropped after 2 weeks, eat about 150–200 fewer calories a day or add 2,000 steps.</p>
+    </div>
+  </section>
+
+  <section><h3>Food without supplements</h3>
+    <p>Build every meal on the plate rule: <b>half vegetables, a quarter protein, a quarter carbs</b> (roti, rice, oats, potato), plus a thumb of fat (oil, ghee, nuts).</p>
+    <div class="tbl"><table><thead><tr><th>Protein food</th><th>Serving</th><th>Protein</th></tr></thead><tbody>
+      <tr><td>Chicken breast</td><td class="n">100 g cooked</td><td class="n">~31 g</td></tr>
+      <tr><td>Fish (rohu, surmai, salmon)</td><td class="n">100 g cooked</td><td class="n">~22 g</td></tr>
+      <tr><td>Whole eggs</td><td class="n">2 eggs</td><td class="n">~12 g</td></tr>
+      <tr><td>Egg whites</td><td class="n">4 whites</td><td class="n">~14 g</td></tr>
+      <tr><td>Soya chunks</td><td class="n">50 g dry</td><td class="n">~26 g</td></tr>
+      <tr><td>Paneer (low-fat if possible)</td><td class="n">100 g</td><td class="n">~18 g</td></tr>
+      <tr><td>Hung curd / Greek yogurt</td><td class="n">200 g</td><td class="n">~20 g</td></tr>
+      <tr><td>Tofu (firm)</td><td class="n">100 g</td><td class="n">~13 g</td></tr>
+      <tr><td>Chana / rajma, cooked</td><td class="n">1 cup</td><td class="n">~14 g</td></tr>
+      <tr><td>Dal, cooked</td><td class="n">1 cup</td><td class="n">~9 g</td></tr>
+      <tr><td>Milk</td><td class="n">250 ml</td><td class="n">~8 g</td></tr>
+    </tbody></table></div>
+    <h3 style="margin-top:6px">Sample day</h3>
+    <div class="tbl"><table><thead><tr><th>Meal</th><th>Non-veg</th><th>Vegetarian</th></tr></thead><tbody>
+      <tr><td>Breakfast</td><td>3 eggs + 1 multigrain toast or 1 roti, fruit</td><td>Paneer bhurji (100 g) + 1 roti, fruit</td></tr>
+      <tr><td>Lunch</td><td>150 g chicken curry, 1 cup rice, dal, salad</td><td>Soya chunk curry, 2 roti, dal, salad</td></tr>
+      <tr><td>Pre-workout</td><td colspan="2">Banana + handful of roasted chana, 60–90 min before</td></tr>
+      <tr><td>Post-workout</td><td colspan="2">200 g hung curd or 250 ml milk</td></tr>
+      <tr><td>Dinner</td><td>Grilled fish or chicken, sabzi, 1 roti</td><td>Tofu or paneer tikka, sabzi, 1 roti, dal</td></tr>
+    </tbody></table></div>
+    <div class="plain"><b>Cut or limit:</b><ul>
+      <li>Sugary drinks, packaged juice, sweetened chai/coffee beyond 1 a day</li>
+      <li>Fried snacks (samosa, pakora, chips), mithai, bakery items</li>
+      <li>Alcohol: it stalls fat loss more than almost anything else</li>
+      <li>Late-night snacking. Close the kitchen 2 hours before bed.</li>
+    </ul></div>
+  </section>
+
+  <section><h3>Recovery basics</h3>
+    <div class="plain"><ul>
+      <li><b>Sleep 7–8 hours.</b> Short sleep raises hunger and lowers muscle gain.</li>
+      <li><b>8,000–10,000 steps every day</b>, including gym days.</li>
+      <li><b>Water:</b> aim for pale-yellow urine; more on sweaty days.</li>
+      <li>Sore for more than 3 days or joints aching? Take an extra rest day and use the deload week early.</li>
+    </ul></div>
+  </section>
+
+  <section><h3>Track progress</h3>
+    <div class="plain"><ul>
+      <li><b>Weekly:</b> waist measurement at the belly button, first thing in the morning</li>
+      <li><b>Daily:</b> body weight, then compare weekly averages (daily numbers jump around)</li>
+      <li><b>Every 2 weeks:</b> front and side photos in the same light</li>
+      <li><b>Good pace:</b> 0.25–0.75 kg lost per week while your lifts go up</li>
+    </ul></div>
+  </section>
+  </div>`;
+}
+function bindCalc(){
+  const bw = document.getElementById("bw");
+  bw.value = store.get("sdr-bw", 89);
+  const calc = () => {
+    const w = parseFloat(bw.value);
+    const ok = w >= 35 && w <= 200;
+    document.getElementById("kcal").textContent = ok ? `${Math.round(w*26/50)*50}–${Math.round(w*28/50)*50}` : "–";
+    document.getElementById("prot").textContent = ok ? `${Math.round(w*1.6)}–${Math.round(w*2)} g` : "–";
+    document.getElementById("water").textContent = ok ? `${(w*0.035).toFixed(1)} L` : "–";
+    if (ok) store.set("sdr-bw", w);
+  };
+  bw.addEventListener("input", calc); calc();
+}
+
+const TABS = [...DAYS.map(d => ({id:d.id, label:d.d, sub:d.tag, c:COLOR[d.type]})), {id:"guide", label:"Guide", sub:"Diet & rules", c:"var(--fg)"}];
+function show(id){
+  document.querySelectorAll("nav.days button").forEach(b => b.setAttribute("aria-selected", b.dataset.id === id));
+  if (id === "guide") renderGuide(); else renderDay(DAYS.find(d => d.id === id));
+  store.set("sdr-tab", id);
+  try{ history.replaceState(null, "", "#" + id); }catch(e){}
+  window.scrollTo({top:0});
+}
+const nav = document.getElementById("days");
+nav.innerHTML = TABS.map(t => `<button type="button" role="tab" data-id="${t.id}" style="--c:${t.c}">${t.label}<small>${t.sub}</small></button>`).join("");
+nav.addEventListener("click", e => { const b = e.target.closest("button"); if (b) show(b.dataset.id); });
+
+document.getElementById("view").addEventListener("click", e => {
+  const s = e.target.closest(".set");
+  if (s){
+    const k = s.dataset.k, n = +s.dataset.s;
+    const arr = new Set(done[k] || []);
+    arr.has(n) ? arr.delete(n) : arr.add(n);
+    done[k] = [...arr]; store.set("sdr-done", done);
+    s.setAttribute("aria-pressed", arr.has(n));
+    const c = document.getElementById("c-" + k);
+    c.classList.toggle("is-done", arr.size === c.querySelectorAll(".set").length);
+    return;
+  }
+  const r = e.target.closest(".rest-btn");
+  if (r) { startTimer(+r.dataset.rest); return; }
+  if (e.target.closest("#reset")){
+    const id = store.get("sdr-tab", "mon");
+    Object.keys(done).forEach(k => { if (k.startsWith(id + "-")) delete done[k]; });
+    store.set("sdr-done", done); show(id);
+  }
+});
+
+let tEnd = 0, tInt = null;
+const tBox = document.getElementById("timer"), tLeft = document.getElementById("tleft");
+function tick(){
+  const s = Math.max(0, Math.round((tEnd - Date.now())/1000));
+  tLeft.textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  tBox.classList.toggle("zero", s === 0);
+  if (s === 0){ clearInterval(tInt); tInt = null; tLeft.textContent = "Go!"; try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+}
+function startTimer(sec){ tEnd = Date.now() + sec*1000; tBox.hidden = false; clearInterval(tInt); tInt = setInterval(tick, 250); tick(); }
+document.getElementById("tadd").onclick = () => { if (!tInt) { tEnd = Date.now(); tInt = setInterval(tick, 250); } tEnd += 30000; tick(); };
+document.getElementById("tstop").onclick = () => { clearInterval(tInt); tInt = null; tBox.hidden = true; };
+
+if (location.hash === "#print"){
+  document.documentElement.classList.add("print");
+  const v = document.getElementById("view");
+  const wk = DAYS.map(d => `<tr><td>${d.d}</td><td><b>${esc(d.title)}</b></td><td>${d.time}</td></tr>`).join("");
+  v.innerHTML = `<section class="pday pcover"><div class="block"><div class="eyebrow">This week</div><div class="tbl"><table><tbody>${wk}</tbody></table></div>
+      <p class="lede">Tap any <b>Watch video</b> link in this PDF to open a form tutorial on YouTube. Tick the circles with a pen, or use the phone version to track sets and rest.</p></div></section>`
+    + DAYS.map(d => `<section class="pday" style="--c:${COLOR[d.type]}">${dayHTML(d)}</section>`).join("")
+    + `<section class="pday" style="--c:var(--pull)">${guideHTML()}</section>`;
+  bindCalc();
+} else {
+const today = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
+const fromHash = (location.hash || "").slice(1);
+show(TABS.some(t => t.id === fromHash) ? fromHash : today);
+}
+</script>
+
+</body>
+</html>
