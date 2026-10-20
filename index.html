@@ -96,9 +96,18 @@ td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowra
 .ph img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:10px;background:var(--chip)}
 .ph figcaption{position:absolute;left:6px;top:6px;font:700 .7rem var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:2px 7px;border-radius:6px}
 .credit{font-size:.8rem}
+.swaps{display:grid;gap:6px}
+.swap{border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.swap summary{cursor:pointer;padding:9px 12px;font-weight:600;font-size:.92rem;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.swap summary::-webkit-details-marker{display:none}
+.swap summary::after{content:"+";color:var(--muted);font-family:var(--mono)}
+.swap[open] summary::after{content:"\2013"}
+.swap-body{display:grid;gap:8px;padding:0 12px 12px}
 html.print nav.days,html.print .timer,html.print .rest-btn,html.print #reset{display:none!important}
 html.print .wrap{max-width:none;padding-block:0}
 html.print .btn.primary::after{content:" ▸"}
+html.print .swap-body .ph,html.print .swap-body .alt,html.print .swap summary::after{display:none}
+html.print .swap{border:0;background:none} html.print .swap summary{padding:2px 0} html.print .swap-body{padding:0 0 4px}
 html.print body{background:#fff;font-size:12.5px;line-height:1.4}
 html.print h2{font-size:1.6rem} html.print h3{font-size:1.1rem}
 html.print .dayhead{padding-block:4px 0;gap:4px}
@@ -146,6 +155,7 @@ html.print .guide section{break-inside:avoid-page}
 
 <script>
 const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q + " proper form tutorial");
+const PRINT = location.hash === "#print";
 const IMG = q => "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q + " exercise form");
 
 const E = (n, sets, reps, rest, cues, avoid, alt, q) => ({n, sets, reps, rest, cues, avoid, alt, q: q || n});
@@ -254,6 +264,7 @@ const DAYS = [
 
 const PHOTO = {"Barbell Bench Press": "Barbell_Bench_Press_-_Medium_Grip", "Seated Dumbbell Shoulder Press": "Dumbbell_Shoulder_Press", "Incline Dumbbell Press": "Incline_Dumbbell_Press", "Cable Lateral Raise": "Side_Lateral_Raise", "Triceps Rope Pushdown": "Triceps_Pushdown_-_Rope_Attachment", "Overhead Dumbbell Triceps Extension": "Standing_Dumbbell_Triceps_Extension", "Plank": "Plank", "Dead Bug": "Dead_Bug", "Lat Pulldown": "Wide-Grip_Lat_Pulldown", "Barbell Bent-Over Row": "Bent_Over_Barbell_Row", "Seated Cable Row": "Seated_Cable_Rows", "Face Pull": "Face_Pull", "Dumbbell Biceps Curl": "Dumbbell_Bicep_Curl", "Hammer Curl": "Hammer_Curls", "Hanging Knee Raise": "Hanging_Leg_Raise", "Barbell Back Squat": "Barbell_Squat", "Romanian Deadlift": "Romanian_Deadlift", "Leg Press": "Leg_Press", "Lying Leg Curl": "Lying_Leg_Curls", "Standing Calf Raise": "Rocking_Standing_Calf_Raise", "Cable Crunch": "Cable_Crunch", "Standing Overhead Press": "Standing_Military_Press", "Flat Dumbbell Bench Press": "Dumbbell_Bench_Press", "Chest Dip": "Dips_-_Chest_Version", "Dumbbell Lateral Raise": "Side_Lateral_Raise", "Cable Chest Fly": "Cable_Crossover", "EZ-Bar Skull Crusher": "EZ-Bar_Skullcrusher", "Side Plank": "Side_Bridge", "Conventional Deadlift": "Barbell_Deadlift", "Pull-Up": "Pullups", "One-Arm Dumbbell Row": "One-Arm_Dumbbell_Row", "Rear Delt Fly": "Reverse_Flyes", "Incline Dumbbell Curl": "Incline_Dumbbell_Curl", "Cable Curl": "Standing_Biceps_Cable_Curl", "Ab Wheel Rollout": "Ab_Roller", "Bulgarian Split Squat": "Split_Squats", "Barbell Hip Thrust": "Barbell_Hip_Thrust", "Walking Lunges": "Bodyweight_Walking_Lunge", "Leg Extension": "Leg_Extensions", "Seated Calf Raise": "Seated_Calf_Raise", "Reverse Crunch": "Reverse_Crunch", "Hip Flexor Stretch": "Kneeling_Hip_Flexor", "Cat-Cow": "Cat_Stretch", "Child's Pose": "Childs_Pose", "Stick Chest & Shoulder Stretch": "Chest_And_Front_Of_Shoulder_Stretch", "Lying Hamstring Stretch": "Hamstring_Stretch"};
 const PHOTO_NOTE = {"Cable Lateral Raise": "Photo shows the dumbbell version; the movement is the same.", "Bulgarian Split Squat": "Photo shows a split squat. For the Bulgarian version, rest your back foot on a bench.", "Walking Lunges": "Photo shows one lunge step; keep walking forward.", "Standing Calf Raise": "Can be done with a barbell, dumbbells or the calf machine."};
+const ALT_PHOTO = {"45° back extension": "Hyperextensions_Back_Extensions", "Ab crunch machine": "Ab_Crunch_Machine", "Arnold press": "Arnold_Dumbbell_Press", "Assisted dip machine": "Dip_Machine", "Band face pull": ["Face_Pull", "Photo shows the cable version; same movement with a band."], "Band lateral raise": "Lateral_Raise_-_With_Bands", "Band-assisted pull-up": "Band_Assisted_Pull-Up", "Barbell bench press": "Barbell_Bench_Press_-_Medium_Grip", "Bench dips": "Bench_Dips", "Bent-over dumbbell row": "Bent_Over_Two-Dumbbell_Row", "Cable Pallof press": "Pallof_Press", "Cable curl": "Standing_Biceps_Cable_Curl", "Cable lateral raise": ["Side_Lateral_Raise", "Photo shows the dumbbell version; the movement is the same."], "Cable pull-through": "Pull_Through", "Cable rear delt fly": "Cable_Rear_Delt_Fly", "Calf raise on leg press": "Calf_Press_On_The_Leg_Press_Machine", "Captain's chair knee raise": "Knee_Hip_Raise_On_Parallel_Bars", "Chest-supported T-bar row": "Lying_T-Bar_Row", "Chest-supported dumbbell row": "Dumbbell_Incline_Row", "Chest-supported machine row": "Leverage_Iso_Row", "Close-grip bench press": "Close-Grip_Barbell_Bench_Press", "Concentration curl": "Concentration_Curls", "Cross-body hammer curl": "Cross_Body_Hammer_Curl", "Decline bench reverse crunch": "Decline_Reverse_Crunch", "Decline machine press": "Leverage_Decline_Chest_Press", "Decline sit-up": ["Decline_Crunch", "Photo shows a decline crunch; for a sit-up, come all the way up."], "Dumbbell Romanian deadlift": "Stiff-Legged_Dumbbell_Deadlift", "Dumbbell bench press": "Dumbbell_Bench_Press", "Dumbbell hip thrust": ["Barbell_Hip_Thrust", "Photo shows the barbell version; hold a dumbbell on your hips instead."], "Dumbbell lateral raise": "Side_Lateral_Raise", "EZ-bar curl": "EZ-Bar_Curl", "EZ-bar overhead extension": "Standing_Overhead_Barbell_Triceps_Extension", "Face pull": "Face_Pull", "Flat dumbbell fly": "Dumbbell_Flyes", "Glute bridge machine": ["Barbell_Glute_Bridge", "Photo shows a barbell glute bridge; the machine follows the same path."], "Goblet squat": "Goblet_Squat", "Hack squat": "Hack_Squat", "Hanging knee raise": "Hanging_Leg_Raise", "Heels-raised goblet squat": ["Goblet_Squat", "Stand with your heels on a small plate to push the work into your quads."], "Incline Smith machine press": "Smith_Machine_Incline_Bench_Press", "Incline machine press": "Leverage_Incline_Chest_Press", "Inverted row on a Smith bar": "Inverted_Row", "Lat pulldown": "Wide-Grip_Lat_Pulldown", "Long-lever plank": ["Plank", "Same as a plank, but place your elbows a few inches further forward."], "Low-to-high cable fly": "Low_Cable_Crossover", "Lying knee tuck": "Leg_Pull-In", "Lying knees-to-chest hug": "Hug_Knees_To_Chest", "Lying leg raise": "Flat_Bench_Lying_Leg_Raise", "Machine chest press": "Leverage_Chest_Press", "Machine high row": "Leverage_High_Row", "Machine row": "Leverage_Iso_Row", "Machine shoulder press": "Machine_Shoulder_Military_Press", "Overhead cable extension": "Cable_Rope_Overhead_Triceps_Extension", "Pec deck machine": "Butterfly", "Preacher curl machine": "Machine_Preacher_Curls", "Push-ups": "Pushups", "Push-ups (feet raised for harder)": "Push-Ups_With_Feet_Elevated", "Rack pull from knee height": "Rack_Pulls", "Reverse pec deck": "Reverse_Machine_Flyes", "Reverse-grip EZ-bar curl": "Reverse_Barbell_Curl", "Rope cable hammer curl": "Cable_Hammer_Curls_-_Rope_Attachment", "Seated dumbbell calf raise": "Dumbbell_Seated_One-Leg_Calf_Raise", "Seated dumbbell shoulder press": "Dumbbell_Shoulder_Press", "Seated forward fold": "Seated_Floor_Hamstring_Stretch", "Seated leg curl": "Seated_Leg_Curl", "Side plank on knees": ["Side_Bridge", "Photo shows a full side plank; rest on your bent knees instead of your feet."], "Single-arm cable pulldown": "One_Arm_Lat_Pulldown", "Single-arm cable row": "Seated_One-arm_Cable_Pulley_Rows", "Single-leg dead bug": ["Dead_Bug", "Move only the legs, one at a time; keep arms still."], "Sissy squat holding a rail": "Weighted_Sissy_Squat", "Smith machine bench press": "Smith_Machine_Bench_Press", "Smith machine calf raise": "Smith_Machine_Calf_Raise", "Smith machine seated press": "Smith_Machine_Overhead_Shoulder_Press", "Smith machine split squat": "Smith_Single-Leg_Split_Squat", "Smith machine squat": "Smith_Machine_Squat", "Stability-ball leg curl": "Ball_Leg_Curl", "Standing calf raise": "Standing_Calf_Raises", "Standing dumbbell curl": "Dumbbell_Bicep_Curl", "Standing hamstring stretch, heel on a bench": "Standing_Hamstring_and_Calf_Stretch", "Standing lunge stretch": "Standing_Hip_Flexors", "Standing single-leg curl machine": "Standing_Leg_Curl", "Stationary lunges": "Dumbbell_Lunges", "Step-up onto a bench": "Dumbbell_Step_Ups", "Step-ups": "Dumbbell_Step_Ups", "Straight-bar pushdown": "Triceps_Pushdown", "Suitcase carry": ["Farmers_Walk", "Photo shows a farmer's walk; carry the weight in one hand only and stay upright."], "T-bar row": "Bent_Over_Two-Arm_Long_Bar_Row", "Trap-bar deadlift": "Trap_Bar_Deadlift", "Triceps extension machine": "Machine_Triceps_Extension", "V-bar pushdown": "Triceps_Pushdown_-_V-Bar_Attachment", "Weighted floor crunch": "Weighted_Crunches"};
 const COLOR = {push:"var(--push)", pull:"var(--pull)", legs:"var(--legs)", rest:"var(--rest)"};
 const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
 const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M21 16l-5-5-8 8"/></svg>';
@@ -267,11 +278,28 @@ let done = store.get("sdr-done", {});
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmtRest = s => s >= 60 ? (s % 60 ? `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")} min` : `${s/60} min`) : `${s} s`;
 
+function pics(id, name){
+  const f = (n, cap) => `<figure><img src="ex/${id}_${n}.jpg" alt="${esc(name)}, ${cap.toLowerCase()} position" loading="lazy" width="480" height="320"><figcaption>${cap}</figcaption></figure>`;
+  return `<div class="ph">${f(0,"Start")}${f(1,"Finish")}</div>`;
+}
 function photo(ex){
   const id = PHOTO[ex.n];
   if (!id) return "";
-  const f = (n, cap) => `<figure><img src="ex/${id}_${n}.jpg" alt="${esc(ex.n)}, ${cap.toLowerCase()} position" loading="lazy" width="480" height="320"><figcaption>${cap}</figcaption></figure>`;
-  return `<div class="ph">${f(0,"Start")}${f(1,"Finish")}</div>${PHOTO_NOTE[ex.n] ? `<div class="alt">${esc(PHOTO_NOTE[ex.n])}</div>` : ""}`;
+  return `${pics(id, ex.n)}${PHOTO_NOTE[ex.n] ? `<div class="alt">${esc(PHOTO_NOTE[ex.n])}</div>` : ""}`;
+}
+
+function swaps(ex, dayId){
+  if (!ex.alt.length) return "";
+  const label = dayId === "sun" ? "Or try" : "Machine busy? Swap for";
+  if (PRINT) return `<div class="alt">${label} (tap a name for its video): ${ex.alt.map(a => `<a href="${YT(a)}"><b>${esc(a)}</b></a>`).join(" · ")}</div>`;
+  const rows = ex.alt.map(a => {
+    const m = ALT_PHOTO[a], id = m && (typeof m === "string" ? m : m[0]), note = m && typeof m !== "string" ? m[1] : "";
+    return `<details class="swap"><summary>${esc(a)}</summary><div class="swap-body">
+      ${id ? pics(id, a) : ""}${note ? `<div class="alt">${esc(note)}</div>` : ""}
+      <div class="row"><a class="btn primary" href="${YT(a)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
+      ${id ? "" : `<a class="btn" href="${IMG(a)}" target="_blank" rel="noopener">${ICON_IMG}See photos</a>`}</div></div></details>`;
+  }).join("");
+  return `<div class="swaps"><div class="alt">${label} (tap for photos and video):</div>${rows}</div>`;
 }
 
 function card(dayId, ex, i){
@@ -286,12 +314,12 @@ function card(dayId, ex, i){
     ${photo(ex)}
     <ol class="cues">${ex.cues.map(c => `<li>${esc(c)}</li>`).join("")}</ol>
     ${ex.avoid ? `<div class="avoid"><b>Avoid:</b> ${esc(ex.avoid)}</div>` : ""}
-    ${ex.alt.length ? `<div class="alt">${dayId === "sun" ? "Or try" : "Machine busy? Swap for"}: ${ex.alt.map(a => `<b>${esc(a)}</b>`).join(" · ")}</div>` : ""}
     <div class="row">
       <a class="btn primary" href="${YT(ex.q)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
       ${ex.rest ? `<button type="button" class="btn rest-btn" data-rest="${ex.rest}">${ICON_TIMER}Rest timer</button>` : ""}
     </div>
     <div class="sets" aria-label="Sets completed">${sets}</div>
+    ${swaps(ex, dayId)}
   </article>`;
 }
 
@@ -476,6 +504,7 @@ if (location.hash === "#print"){
       <p class="lede">Tap any <b>Watch video</b> link in this PDF to open a form tutorial on YouTube. Tick the circles with a pen, or use the phone version to track sets and rest.</p></div></section>`
     + DAYS.map(d => `<section class="pday" style="--c:${COLOR[d.type]}">${dayHTML(d)}</section>`).join("")
     + `<section class="pday" style="--c:var(--pull)">${guideHTML()}</section>`;
+  v.querySelectorAll("details.swap").forEach(d => d.open = true);
   bindCalc();
 } else {
 const today = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
