@@ -87,6 +87,7 @@ td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowra
 .note{border-left:4px solid var(--legs);padding:10px 14px;background:var(--surface);border-radius:0 10px 10px 0}
 
 .timer{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--fg);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;align-items:center;gap:14px}
+.timer[hidden]{display:none}
 .timer b{font:500 1.8rem var(--mono);font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:center}
 .timer button{border:0;border-radius:10px;padding:9px 14px;font:600 .9rem var(--body);background:var(--bg);color:var(--fg);cursor:pointer}
 .timer.zero b{color:var(--legs)}
@@ -157,94 +158,94 @@ const WARM_UP = {
 const DAYS = [
  { id:"mon", d:"Mon", tag:"Push A", type:"push", title:"Push A · Chest & Shoulders", time:"60–75 min", warm:"upper",
    main:[
-    E("Barbell Bench Press",4,"6–8",150,["Squeeze shoulder blades back and down, feet flat on the floor","Lower the bar to mid-chest with elbows about 45° from your body","Press up and slightly back toward your face, without bouncing"],"Bouncing the bar off your chest, flaring elbows straight out","Dumbbell bench press"),
-    E("Seated Dumbbell Shoulder Press",3,"8–10",90,["Bench almost upright, back flat against the pad","Start with dumbbells at ear level, palms forward","Press up until arms are straight, then lower slowly"],"Arching your lower back off the bench","Machine shoulder press"),
-    E("Incline Dumbbell Press",3,"8–12",90,["Bench at about 30°","Lower dumbbells to the upper chest until you feel a stretch","Press up and in, without clanking the weights"],"Bench set too steep, which turns it into a shoulder press","Incline machine press"),
-    E("Cable Lateral Raise",3,"12–15 /side",60,["Stand side-on to the cable, handle at hip","Raise out to the side, leading with the elbow, to shoulder height","Take 2–3 seconds to lower"],"Swinging the body or shrugging the shoulders up","Dumbbell lateral raise"),
-    E("Triceps Rope Pushdown",3,"10–12",60,["Elbows pinned to your sides","Push down and spread the rope at the bottom","Let the rope rise only until forearms are parallel to the floor"],"Elbows drifting forward, leaning your body weight into it","Straight-bar pushdown"),
-    E("Overhead Dumbbell Triceps Extension",2,"12",60,["Hold one dumbbell with both hands overhead","Elbows point forward, lower behind your head for a deep stretch","Extend to straight arms"],"Elbows flaring wide","Overhead cable extension")
+    E("Barbell Bench Press",4,"6–8",150,["Squeeze shoulder blades back and down, feet flat on the floor","Lower the bar to mid-chest with elbows about 45° from your body","Press up and slightly back toward your face, without bouncing"],"Bouncing the bar off your chest, flaring elbows straight out",["Dumbbell bench press", "Machine chest press", "Smith machine bench press"]),
+    E("Seated Dumbbell Shoulder Press",3,"8–10",90,["Bench almost upright, back flat against the pad","Start with dumbbells at ear level, palms forward","Press up until arms are straight, then lower slowly"],"Arching your lower back off the bench",["Machine shoulder press", "Smith machine seated press", "Arnold press"]),
+    E("Incline Dumbbell Press",3,"8–12",90,["Bench at about 30°","Lower dumbbells to the upper chest until you feel a stretch","Press up and in, without clanking the weights"],"Bench set too steep, which turns it into a shoulder press",["Incline machine press", "Incline Smith machine press", "Low-to-high cable fly"]),
+    E("Cable Lateral Raise",3,"12–15 /side",60,["Stand side-on to the cable, handle at hip","Raise out to the side, leading with the elbow, to shoulder height","Take 2–3 seconds to lower"],"Swinging the body or shrugging the shoulders up",["Dumbbell lateral raise", "Lateral raise machine", "Band lateral raise"]),
+    E("Triceps Rope Pushdown",3,"10–12",60,["Elbows pinned to your sides","Push down and spread the rope at the bottom","Let the rope rise only until forearms are parallel to the floor"],"Elbows drifting forward, leaning your body weight into it",["Straight-bar pushdown", "V-bar pushdown", "Bench dips"]),
+    E("Overhead Dumbbell Triceps Extension",2,"12",60,["Hold one dumbbell with both hands overhead","Elbows point forward, lower behind your head for a deep stretch","Extend to straight arms"],"Elbows flaring wide",["Overhead cable extension", "EZ-bar overhead extension", "Triceps extension machine"])
    ],
    core:[
-    E("Plank",3,"30–60 s",45,["Forearms under shoulders, body in a straight line","Squeeze glutes and brace like someone will poke your stomach","Breathe steadily"],"Hips sagging or piking up","Knee plank to start"),
-    E("Dead Bug",3,"10 /side",45,["Lie on your back, arms up, knees at 90°","Press lower back into the floor","Lower opposite arm and leg slowly, then switch"],"Lower back lifting off the floor","Single-leg dead bug")
+    E("Plank",3,"30–60 s",45,["Forearms under shoulders, body in a straight line","Squeeze glutes and brace like someone will poke your stomach","Breathe steadily"],"Hips sagging or piking up",["Knee plank to start", "Stability-ball plank", "Bear crawl hold"]),
+    E("Dead Bug",3,"10 /side",45,["Lie on your back, arms up, knees at 90°","Press lower back into the floor","Lower opposite arm and leg slowly, then switch"],"Lower back lifting off the floor",["Single-leg dead bug", "Bird dog", "Hollow body hold"])
    ],
    cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h. Don't hold the rails."
  },
  { id:"tue", d:"Tue", tag:"Pull A", type:"pull", title:"Pull A · Back Width & Biceps", time:"60–75 min", warm:"upper",
    main:[
-    E("Lat Pulldown",4,"8–10",90,["Grip slightly wider than shoulders, thighs locked under the pad","Chest up, pull the bar to your upper chest by driving elbows down","Let the bar rise slowly until arms are straight"],"Leaning far back, pulling behind the neck","Assisted pull-up machine"),
-    E("Barbell Bent-Over Row",3,"8–10",120,["Hinge forward to about 45°, back flat, knees soft","Pull the bar to your lower ribs","Squeeze shoulder blades together at the top, lower under control"],"Jerking the weight up with your hips, rounding your back","Chest-supported machine row or T-bar row"),
-    E("Seated Cable Row",3,"10–12",90,["Sit tall, slight bend in knees","Pull handle to your belly button, squeeze shoulder blades","Reach forward for a stretch without rounding your back"],"Rocking back and forth to move the weight","Machine row"),
-    E("Face Pull",3,"15",60,["Rope set at eye level","Pull toward your face, hands ending beside your ears","Thumbs point back at the end"],"Going too heavy; this is a light posture exercise","Band face pull"),
-    E("Dumbbell Biceps Curl",3,"10–12",60,["Elbows stay at your sides","Curl up, turning palms toward the ceiling","Take 2–3 seconds to lower"],"Swinging your back to lift the weight","EZ-bar curl"),
-    E("Hammer Curl",2,"12",60,["Palms face each other throughout","Curl to shoulder height","Lower slowly"],"Elbows moving forward","Rope cable hammer curl")
+    E("Lat Pulldown",4,"8–10",90,["Grip slightly wider than shoulders, thighs locked under the pad","Chest up, pull the bar to your upper chest by driving elbows down","Let the bar rise slowly until arms are straight"],"Leaning far back, pulling behind the neck",["Assisted pull-up machine", "Machine high row", "Single-arm cable pulldown"]),
+    E("Barbell Bent-Over Row",3,"8–10",120,["Hinge forward to about 45°, back flat, knees soft","Pull the bar to your lower ribs","Squeeze shoulder blades together at the top, lower under control"],"Jerking the weight up with your hips, rounding your back",["Chest-supported machine row", "T-bar row", "Bent-over dumbbell row"]),
+    E("Seated Cable Row",3,"10–12",90,["Sit tall, slight bend in knees","Pull handle to your belly button, squeeze shoulder blades","Reach forward for a stretch without rounding your back"],"Rocking back and forth to move the weight",["Machine row", "Chest-supported dumbbell row", "Inverted row on a Smith bar"]),
+    E("Face Pull",3,"15",60,["Rope set at eye level","Pull toward your face, hands ending beside your ears","Thumbs point back at the end"],"Going too heavy; this is a light posture exercise",["Band face pull", "Reverse pec deck", "Prone Y-raise with light dumbbells"]),
+    E("Dumbbell Biceps Curl",3,"10–12",60,["Elbows stay at your sides","Curl up, turning palms toward the ceiling","Take 2–3 seconds to lower"],"Swinging your back to lift the weight",["EZ-bar curl", "Cable curl", "Preacher curl machine"]),
+    E("Hammer Curl",2,"12",60,["Palms face each other throughout","Curl to shoulder height","Lower slowly"],"Elbows moving forward",["Rope cable hammer curl", "Cross-body hammer curl", "Reverse-grip EZ-bar curl"])
    ],
    core:[
-    E("Hanging Knee Raise",3,"10–15",60,["Hang from the bar, shoulders active","Curl knees up toward your chest, tilting the pelvis","Lower slowly without swinging"],"Using momentum to swing","Lying leg raise or captain's chair knee raise")
+    E("Hanging Knee Raise",3,"10–15",60,["Hang from the bar, shoulders active","Curl knees up toward your chest, tilting the pelvis","Lower slowly without swinging"],"Using momentum to swing",["Captain's chair knee raise", "Lying leg raise", "Decline bench reverse crunch"])
    ],
    cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
  },
  { id:"wed", d:"Wed", tag:"Legs A", type:"legs", title:"Legs A · Squat Strength", time:"60–75 min", warm:"lower",
    main:[
-    E("Barbell Back Squat",4,"6–8",150,["Bar on upper back, feet shoulder-width, toes slightly out","Big breath, brace your stomach, sit down between your heels","Knees follow your toes; go to thighs parallel or lower if your back stays neutral"],"Heels lifting, knees caving inward, rounding at the bottom","Hack squat or goblet squat"),
-    E("Romanian Deadlift",3,"8–10",120,["Soft knees, push your hips straight back","Keep the bar touching your thighs as it lowers","Stop when you feel a strong hamstring stretch, then drive hips forward"],"Rounding the back, turning it into a squat","Dumbbell Romanian deadlift"),
-    E("Leg Press",3,"10–12",90,["Feet mid-platform, shoulder-width","Lower until knees are about 90°","Press up without locking the knees; lower back stays on the pad"],"Lowering so deep that your hips curl off the seat",""),
-    E("Lying Leg Curl",3,"12",60,["Pad just above your heels","Curl up fully, pause 1 second","Lower slowly"],"Hips lifting off the bench","Seated leg curl"),
-    E("Standing Calf Raise",4,"12–15",60,["Balls of feet on the edge","Drop heels for a full stretch, pause 1 second","Rise as high as possible and squeeze"],"Bouncing through short reps","Calf raise on leg press")
+    E("Barbell Back Squat",4,"6–8",150,["Bar on upper back, feet shoulder-width, toes slightly out","Big breath, brace your stomach, sit down between your heels","Knees follow your toes; go to thighs parallel or lower if your back stays neutral"],"Heels lifting, knees caving inward, rounding at the bottom",["Hack squat", "Smith machine squat", "Goblet squat"]),
+    E("Romanian Deadlift",3,"8–10",120,["Soft knees, push your hips straight back","Keep the bar touching your thighs as it lowers","Stop when you feel a strong hamstring stretch, then drive hips forward"],"Rounding the back, turning it into a squat",["Dumbbell Romanian deadlift", "Cable pull-through", "45° back extension"]),
+    E("Leg Press",3,"10–12",90,["Feet mid-platform, shoulder-width","Lower until knees are about 90°","Press up without locking the knees; lower back stays on the pad"],"Lowering so deep that your hips curl off the seat",["Hack squat", "Smith machine squat", "Goblet squat"]),
+    E("Lying Leg Curl",3,"12",60,["Pad just above your heels","Curl up fully, pause 1 second","Lower slowly"],"Hips lifting off the bench",["Seated leg curl", "Standing single-leg curl machine", "Stability-ball leg curl"]),
+    E("Standing Calf Raise",4,"12–15",60,["Balls of feet on the edge","Drop heels for a full stretch, pause 1 second","Rise as high as possible and squeeze"],"Bouncing through short reps",["Calf raise on leg press", "Smith machine calf raise", "Single-leg dumbbell calf raise"])
    ],
    core:[
-    E("Cable Crunch",3,"12–15",60,["Kneel facing the cable, rope beside your head","Crunch your ribs toward your hips","Hips stay still; your spine does the curling"],"Sitting back on your heels to pull with arms","Weighted floor crunch")
+    E("Cable Crunch",3,"12–15",60,["Kneel facing the cable, rope beside your head","Crunch your ribs toward your hips","Hips stay still; your spine does the curling"],"Sitting back on your heels to pull with arms",["Ab crunch machine", "Weighted floor crunch", "Decline sit-up"])
    ],
    cardio:"Easy bike, 10 min, as a cool-down."
  },
  { id:"thu", d:"Thu", tag:"Push B", type:"push", title:"Push B · Shoulders & Triceps", time:"60–75 min", warm:"upper",
    main:[
-    E("Standing Overhead Press",4,"6–8",150,["Bar resting on upper chest, grip just outside shoulders","Squeeze glutes and stomach, press straight up","Move your head back slightly, then through once the bar passes"],"Leaning back to turn it into a standing bench press","Seated dumbbell shoulder press","barbell overhead press"),
-    E("Flat Dumbbell Bench Press",3,"8–10",120,["Shoulder blades pinned back","Lower until dumbbells are level with your chest","Press up, ending with dumbbells over your shoulders"],"Dropping the weights too fast at the bottom","Machine chest press"),
-    E("Chest Dip",3,"8–12",90,["Lean your body slightly forward","Lower until shoulders are just below elbows","Press back up without locking hard"],"Going too deep if your shoulders hurt","Assisted dip machine or push-ups"),
-    E("Dumbbell Lateral Raise",4,"12–15",60,["Slight bend in elbows, small forward lean","Raise out to the sides to shoulder height","Lower slowly over 2–3 seconds"],"Swinging and shrugging","Cable lateral raise"),
-    E("Cable Chest Fly",3,"12–15",60,["Pulleys at chest height, small step forward","Soft bend in elbows, bring hands together like hugging a tree","Open slowly until you feel a chest stretch"],"Bending arms into a press","Pec deck machine"),
-    E("EZ-Bar Skull Crusher",3,"10–12",60,["Lie on a bench, arms angled slightly back","Bend only at the elbows, lowering the bar toward your forehead","Extend back to the start"],"Elbows flaring out","Dumbbell skull crusher","ez bar skull crusher")
+    E("Standing Overhead Press",4,"6–8",150,["Bar resting on upper chest, grip just outside shoulders","Squeeze glutes and stomach, press straight up","Move your head back slightly, then through once the bar passes"],"Leaning back to turn it into a standing bench press",["Seated dumbbell shoulder press", "Machine shoulder press", "Landmine press"],"barbell overhead press"),
+    E("Flat Dumbbell Bench Press",3,"8–10",120,["Shoulder blades pinned back","Lower until dumbbells are level with your chest","Press up, ending with dumbbells over your shoulders"],"Dropping the weights too fast at the bottom",["Machine chest press", "Barbell bench press", "Push-ups (feet raised for harder)"]),
+    E("Chest Dip",3,"8–12",90,["Lean your body slightly forward","Lower until shoulders are just below elbows","Press back up without locking hard"],"Going too deep if your shoulders hurt",["Assisted dip machine", "Decline machine press", "Push-ups"]),
+    E("Dumbbell Lateral Raise",4,"12–15",60,["Slight bend in elbows, small forward lean","Raise out to the sides to shoulder height","Lower slowly over 2–3 seconds"],"Swinging and shrugging",["Cable lateral raise", "Lateral raise machine", "Band lateral raise"]),
+    E("Cable Chest Fly",3,"12–15",60,["Pulleys at chest height, small step forward","Soft bend in elbows, bring hands together like hugging a tree","Open slowly until you feel a chest stretch"],"Bending arms into a press",["Pec deck machine", "Flat dumbbell fly", "Band chest fly"]),
+    E("EZ-Bar Skull Crusher",3,"10–12",60,["Lie on a bench, arms angled slightly back","Bend only at the elbows, lowering the bar toward your forehead","Extend back to the start"],"Elbows flaring out",["Dumbbell skull crusher", "Overhead cable extension", "Close-grip bench press"],"ez bar skull crusher")
    ],
    core:[
-    E("Side Plank",3,"30 s /side",45,["Elbow under shoulder, feet stacked","Lift hips into a straight line","Hold without sagging"],"Hips drifting back","Side plank on knees")
+    E("Side Plank",3,"30 s /side",45,["Elbow under shoulder, feet stacked","Lift hips into a straight line","Hold without sagging"],"Hips drifting back",["Side plank on knees", "Suitcase carry", "Cable Pallof press"])
    ],
    cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
  },
  { id:"fri", d:"Fri", tag:"Pull B", type:"pull", title:"Pull B · Deadlift & Back Thickness", time:"60–75 min", warm:"lower",
    main:[
-    E("Conventional Deadlift",3,"5",180,["Bar over mid-foot, shins touching the bar","Hinge down, flat back, chest up, take the slack out of the bar","Push the floor away and keep the bar dragging up your legs; finish by squeezing glutes"],"Rounding your back, yanking the bar, leaning back at the top","Trap-bar deadlift"),
-    E("Pull-Up",3,"6–10",120,["Start from a dead hang, palms facing away","Pull your chest toward the bar","Lower all the way under control"],"Half reps and kicking","Assisted pull-up machine or band-assisted pull-up"),
-    E("One-Arm Dumbbell Row",3,"10 /side",90,["One hand and knee on a bench, back flat","Pull the dumbbell toward your hip","Let it hang for a full stretch at the bottom"],"Twisting your torso to lift","Single-arm cable row"),
-    E("Rear Delt Fly",3,"15",60,["Use the reverse pec deck or bend over with light dumbbells","Arms slightly bent, sweep out to the sides","Squeeze for 1 second at the back"],"Going heavy and using momentum","Reverse pec deck"),
-    E("Incline Dumbbell Curl",3,"10",60,["Bench at 45–60°, arms hanging straight down","Curl without moving your upper arm","Full stretch at the bottom"],"Shoulders rolling forward","Standing dumbbell curl"),
-    E("Cable Curl",2,"12–15",60,["Elbows at your sides","Curl up and squeeze","Lower slowly"],"Leaning back","Band curl")
+    E("Conventional Deadlift",3,"5",180,["Bar over mid-foot, shins touching the bar","Hinge down, flat back, chest up, take the slack out of the bar","Push the floor away and keep the bar dragging up your legs; finish by squeezing glutes"],"Rounding your back, yanking the bar, leaning back at the top",["Trap-bar deadlift", "Rack pull from knee height", "Dumbbell Romanian deadlift"]),
+    E("Pull-Up",3,"6–10",120,["Start from a dead hang, palms facing away","Pull your chest toward the bar","Lower all the way under control"],"Half reps and kicking",["Assisted pull-up machine", "Band-assisted pull-up", "Lat pulldown"]),
+    E("One-Arm Dumbbell Row",3,"10 /side",90,["One hand and knee on a bench, back flat","Pull the dumbbell toward your hip","Let it hang for a full stretch at the bottom"],"Twisting your torso to lift",["Single-arm cable row", "Single-arm machine row", "Chest-supported T-bar row"]),
+    E("Rear Delt Fly",3,"15",60,["Use the reverse pec deck or bend over with light dumbbells","Arms slightly bent, sweep out to the sides","Squeeze for 1 second at the back"],"Going heavy and using momentum",["Reverse pec deck", "Cable rear delt fly", "Face pull"]),
+    E("Incline Dumbbell Curl",3,"10",60,["Bench at 45–60°, arms hanging straight down","Curl without moving your upper arm","Full stretch at the bottom"],"Shoulders rolling forward",["Standing dumbbell curl", "Bayesian cable curl (facing away)", "Preacher curl machine"]),
+    E("Cable Curl",2,"12–15",60,["Elbows at your sides","Curl up and squeeze","Lower slowly"],"Leaning back",["EZ-bar curl", "Band curl", "Concentration curl"])
    ],
    core:[
-    E("Ab Wheel Rollout",3,"8–10",60,["Kneel, hands on the wheel under your shoulders","Roll forward only as far as you can keep your back flat","Pull back using your abs"],"Lower back sagging","Plank walkouts")
+    E("Ab Wheel Rollout",3,"8–10",60,["Kneel, hands on the wheel under your shoulders","Roll forward only as far as you can keep your back flat","Pull back using your abs"],"Lower back sagging",["Plank walkouts", "Stability-ball rollout", "Long-lever plank"])
    ],
    cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h."
  },
  { id:"sat", d:"Sat", tag:"Legs B", type:"legs", title:"Legs B · Glutes, Lunges & Conditioning", time:"60–75 min", warm:"lower",
    main:[
-    E("Bulgarian Split Squat",3,"8–10 /leg",90,["Back foot on a bench, front foot about 2 feet forward","Drop the back knee straight down","Push through the front heel to stand"],"Front knee caving in, wobbling (hold something for balance at first)","Reverse lunge"),
-    E("Barbell Hip Thrust",3,"10",90,["Upper back on a bench, bar padded over your hips","Chin tucked, drive hips up until body is flat","Squeeze glutes hard for 1 second at the top"],"Arching your lower back instead of using glutes","Glute bridge machine or dumbbell hip thrust"),
-    E("Walking Lunges",3,"20 steps",90,["Long step, both knees bend to about 90°","Upright torso","Push through the front heel into the next step"],"Short steps that put all the load on the knees","Stationary lunges"),
-    E("Leg Extension",3,"12–15",60,["Pad on lower shins, knees in line with the machine pivot","Straighten fully and squeeze 1 second","Lower slowly"],"Kicking the weight up",""),
-    E("Seated Calf Raise",3,"15–20",60,["Pad on lower thighs","Full stretch at the bottom","Rise high and squeeze"],"Short bouncing reps","Standing calf raise")
+    E("Bulgarian Split Squat",3,"8–10 /leg",90,["Back foot on a bench, front foot about 2 feet forward","Drop the back knee straight down","Push through the front heel to stand"],"Front knee caving in, wobbling (hold something for balance at first)",["Reverse lunge", "Smith machine split squat", "Step-up onto a bench"]),
+    E("Barbell Hip Thrust",3,"10",90,["Upper back on a bench, bar padded over your hips","Chin tucked, drive hips up until body is flat","Squeeze glutes hard for 1 second at the top"],"Arching your lower back instead of using glutes",["Glute bridge machine", "Dumbbell hip thrust", "Smith machine hip thrust"]),
+    E("Walking Lunges",3,"20 steps",90,["Long step, both knees bend to about 90°","Upright torso","Push through the front heel into the next step"],"Short steps that put all the load on the knees",["Stationary lunges", "Step-ups", "Smith machine reverse lunge"]),
+    E("Leg Extension",3,"12–15",60,["Pad on lower shins, knees in line with the machine pivot","Straighten fully and squeeze 1 second","Lower slowly"],"Kicking the weight up",["Single-leg cable extension (ankle strap)", "Heels-raised goblet squat", "Sissy squat holding a rail"]),
+    E("Seated Calf Raise",3,"15–20",60,["Pad on lower thighs","Full stretch at the bottom","Rise high and squeeze"],"Short bouncing reps",["Standing calf raise", "Calf raise on leg press", "Seated dumbbell calf raise"])
    ],
    core:[
-    E("Reverse Crunch",3,"12–15",45,["Lie on your back, knees bent at 90°","Curl your hips off the floor toward your chest","Lower slowly"],"Swinging the legs","Lying knee tuck")
+    E("Reverse Crunch",3,"12–15",45,["Lie on your back, knees bent at 90°","Curl your hips off the floor toward your chest","Lower slowly"],"Swinging the legs",["Lying knee tuck", "Hanging knee raise", "Decline bench reverse crunch"])
    ],
    cardio:"Bike intervals, 10 rounds: 20 s hard, 40 s easy (10 min total). Then 5 min easy."
  },
  { id:"sun", d:"Sun", tag:"Rest", type:"rest", title:"Rest & Recover", time:"30–60 min, optional", rest:true,
    main:[
-    E("Hip Flexor Stretch",2,"45 s /side",0,["Half-kneeling, squeeze the glute of the back leg","Shift hips forward slightly","Keep the torso upright"],"Arching the lower back","","kneeling hip flexor stretch"),
-    E("Lying Hamstring Stretch",2,"45 s /side",0,["Lie on your back, loop a towel or band around one foot","Straighten that leg up toward the ceiling","Pull gently until you feel the back of the thigh stretch"],"Lifting your hips or bending the knee a lot",""),
-    E("Stick Chest & Shoulder Stretch",2,"10 slow reps",0,["Hold a broomstick, towel or band with a wide grip","Keep arms straight and lift it overhead, then back as far as is comfortable","Return slowly; widen your grip if it feels tight"],"Bending the elbows or forcing past a pinch",""),
-    E("Cat-Cow",1,"10 slow reps",0,["On hands and knees","Round your back up, then let it sink","Move with your breathing"],"Rushing",""),
-    E("Child's Pose",1,"60 s",0,["Knees wide, sit back toward heels","Arms stretched forward","Breathe into your back"],"",""),
+    E("Hip Flexor Stretch",2,"45 s /side",0,["Half-kneeling, squeeze the glute of the back leg","Shift hips forward slightly","Keep the torso upright"],"Arching the lower back",["Standing lunge stretch", "Couch stretch against a wall"],"kneeling hip flexor stretch"),
+    E("Lying Hamstring Stretch",2,"45 s /side",0,["Lie on your back, loop a towel or band around one foot","Straighten that leg up toward the ceiling","Pull gently until you feel the back of the thigh stretch"],"Lifting your hips or bending the knee a lot",["Standing hamstring stretch, heel on a bench", "Seated forward fold"]),
+    E("Stick Chest & Shoulder Stretch",2,"10 slow reps",0,["Hold a broomstick, towel or band with a wide grip","Keep arms straight and lift it overhead, then back as far as is comfortable","Return slowly; widen your grip if it feels tight"],"Bending the elbows or forcing past a pinch",["Doorway chest stretch", "Wall shoulder slides"]),
+    E("Cat-Cow",1,"10 slow reps",0,["On hands and knees","Round your back up, then let it sink","Move with your breathing"],"Rushing",["Seated cat-cow on a chair", "Thread the needle"]),
+    E("Child's Pose",1,"60 s",0,["Knees wide, sit back toward heels","Arms stretched forward","Breathe into your back"],"",["Puppy pose", "Lying knees-to-chest hug"]),
    ],
    core:[],
    cardio:"Walk 8,000–10,000 steps. Total rest is fine too. Rest is when muscle actually gets built."
@@ -285,7 +286,7 @@ function card(dayId, ex, i){
     ${photo(ex)}
     <ol class="cues">${ex.cues.map(c => `<li>${esc(c)}</li>`).join("")}</ol>
     ${ex.avoid ? `<div class="avoid"><b>Avoid:</b> ${esc(ex.avoid)}</div>` : ""}
-    ${ex.alt ? `<div class="alt">Machine busy? Swap for <b>${esc(ex.alt)}</b>.</div>` : ""}
+    ${ex.alt.length ? `<div class="alt">${dayId === "sun" ? "Or try" : "Machine busy? Swap for"}: ${ex.alt.map(a => `<b>${esc(a)}</b>`).join(" · ")}</div>` : ""}
     <div class="row">
       <a class="btn primary" href="${YT(ex.q)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
       ${ex.rest ? `<button type="button" class="btn rest-btn" data-rest="${ex.rest}">${ICON_TIMER}Rest timer</button>` : ""}
