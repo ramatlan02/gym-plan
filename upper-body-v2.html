@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>body{margin:0}</style>
+<title>Upper-Body Pump Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: gym-floor card. Sticky day strip on top, one day at a time, exercise cards stacked; days color-coded like Olympic bumper plates (Push red, Pull blue, Legs amber). */
+:root{
+  --bg:#F2F3F1; --surface:#FFFFFF; --fg:#17191C; --muted:#5D636B; --line:#DADDE0;
+  --push:#C8302B; --pull:#1F56C4; --legs:#C98A00; --rest:#2E8B57;
+  --chip:#E7E9EC; --done:#2E8B57;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111315; --surface:#1A1D20; --fg:#ECEEF0; --muted:#9AA1A9; --line:#2C3035;
+  --push:#F0625C; --pull:#6E9BFF; --legs:#F2B630; --rest:#4CC38A; --chip:#24282C; --done:#4CC38A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111315; --surface:#1A1D20; --fg:#ECEEF0; --muted:#9AA1A9; --line:#2C3035;
+  --push:#F0625C; --pull:#6E9BFF; --legs:#F2B630; --rest:#4CC38A; --chip:#24282C; --done:#4CC38A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 120px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:2.4rem;font-weight:800;letter-spacing:.01em;text-transform:uppercase}
+h2{font-size:1.9rem;font-weight:800;text-transform:uppercase}
+h3{font-size:1.3rem;font-weight:700}
+.lede{color:var(--muted);margin:.4rem 0 0;max-width:60ch}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+a{color:inherit}
+
+nav.days{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:12px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.days::-webkit-scrollbar{display:none}
+nav.days button{flex:0 0 auto;min-width:58px;border:0;border-radius:10px;padding:8px 10px;background:var(--chip);color:var(--fg);font-family:var(--display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;border-bottom:4px solid var(--c,var(--muted))}
+nav.days button small{font-family:var(--body);font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.04em}
+nav.days button[aria-selected="true"]{background:var(--c,var(--fg));color:#fff}
+nav.days button[aria-selected="true"] small{color:#fff;opacity:.85}
+nav.days button:focus-visible,.btn:focus-visible,.set:focus-visible{outline:3px solid var(--c,var(--pull));outline-offset:2px}
+
+.dayhead{display:grid;gap:8px;padding-block:22px 6px}
+.dayhead h2{color:var(--c)}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--chip);color:var(--fg)}
+
+.block{margin-top:22px;display:grid;gap:12px}
+.block > .eyebrow{display:flex;justify-content:space-between;align-items:baseline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px;min-width:0}
+.card.is-done{border-color:var(--done)}
+.ex-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ex-top h3{min-width:0}
+.dose{font-family:var(--mono);font-size:.95rem;white-space:nowrap;color:var(--c);font-variant-numeric:tabular-nums;text-align:right}
+.dose span{display:block;font-size:.75rem;color:var(--muted)}
+ol.cues{margin:0;padding-left:1.2rem;display:grid;gap:3px}
+.avoid{font-size:.92rem;color:var(--muted)}
+.avoid b{color:var(--push)}
+.elbow b{color:var(--pull)}
+.alt{font-size:.9rem;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:10px;padding:9px 13px;font:600 .92rem var(--body);text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--c);border-color:var(--c);color:#fff}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+.sets{display:flex;flex-wrap:wrap;gap:6px}
+.set{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted);font:600 .9rem var(--mono);cursor:pointer}
+.set[aria-pressed="true"]{background:var(--done);border-color:var(--done);color:#fff}
+
+.plain{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.plain ul,.plain ol{margin:.3rem 0 0;padding-left:1.2rem;display:grid;gap:4px}
+.guide section{margin-top:26px;display:grid;gap:12px}
+.guide p{margin:0;max-width:65ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--display);font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.calc label{display:grid;gap:4px;font-weight:600;font-size:.9rem}
+.calc input{font:500 1.1rem var(--mono);padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:100%}
+.stat{background:var(--chip);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font:500 1.25rem var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted)}
+.note{border-left:4px solid var(--legs);padding:10px 14px;background:var(--surface);border-radius:0 10px 10px 0}
+
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--fg);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;align-items:center;gap:14px}
+.timer[hidden]{display:none}
+.timer b{font:500 1.8rem var(--mono);font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:center}
+.timer button{border:0;border-radius:10px;padding:9px 14px;font:600 .9rem var(--body);background:var(--bg);color:var(--fg);cursor:pointer}
+.timer.zero b{color:var(--legs)}
+.ph{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ph figure{margin:0;position:relative;min-width:0}
+.ph img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:10px;background:var(--chip)}
+.ph figcaption{position:absolute;left:6px;top:6px;font:700 .7rem var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:2px 7px;border-radius:6px}
+.credit{font-size:.8rem}
+.swaps{display:grid;gap:6px}
+.swap{border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.swap summary{cursor:pointer;padding:9px 12px;font-weight:600;font-size:.92rem;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.swap summary::-webkit-details-marker{display:none}
+.swap summary::after{content:"+";color:var(--muted);font-family:var(--mono)}
+.swap[open] summary::after{content:"\2013"}
+.swap-body{display:grid;gap:8px;padding:0 12px 12px}
+html.print nav.days,html.print .timer,html.print .rest-btn,html.print #reset{display:none!important}
+html.print .wrap{max-width:none;padding-block:0}
+html.print .btn.primary::after{content:" ▸"}
+html.print .swap-body .ph,html.print .swap-body .alt,html.print .swap summary::after{display:none}
+html.print .swap{border:0;background:none} html.print .swap summary{padding:2px 0} html.print .swap-body{padding:0 0 4px}
+html.print body{background:#fff;font-size:12.5px;line-height:1.4}
+html.print h2{font-size:1.6rem} html.print h3{font-size:1.1rem}
+html.print .dayhead{padding-block:4px 0;gap:4px}
+html.print .eyebrow{break-after:avoid}
+html.print .ex-top{gap:8px}
+html.print .btn{padding:4px 9px;font-size:.8rem}
+html.print .plain{padding:10px 12px}
+html.print .lede{max-width:none}
+html.print .avoid,html.print .alt{font-size:.95em}
+html.print .guide section{margin-top:14px}
+html.print .pday + .pday{break-before:page}
+html.print .block,html.print .guide section{display:block}
+html.print .block > * + *,html.print .guide section > * + *{margin-top:10px}
+html.print .card{break-inside:avoid;display:grid;grid-template-columns:250px 1fr;column-gap:14px;row-gap:4px;padding:10px;align-content:start}
+html.print .card > *{grid-column:2}
+html.print .card > .ph{grid-column:1;grid-row:1 / span 7;align-self:start}
+html.print .set{width:26px;height:26px;font-size:.75rem}
+html.print .block{gap:8px;margin-top:14px}
+html.print .plain,html.print .tbl,html.print .note{break-inside:avoid}
+html.print .guide section{break-inside:avoid-page}
+@page{size:A4;margin:12mm}
+.foot{margin-top:30px;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Version 2 · 6 days · upper-body focus · left-elbow safe</div>
+    <h1>Upper-Body Pump Plan</h1>
+    <p class="lede">Lean muscle with the focus on chest, back, shoulders and arms, plus abs and fat loss. Built around a left-elbow surgery: machines, cables and neutral grips. Pick today's day, follow the cards, tap a circle after each set.</p>
+    <p class="row"><a class="btn" href="Upper-Body-Pump-Plan.pdf" target="_blank" rel="noopener">Download PDF</a><a class="btn" href="index.html">Version 1: Recomp plan</a></p>
+  </header>
+
+  <nav class="days" id="days" role="tablist" aria-label="Choose a day"></nav>
+  <main id="view"></main>
+  <p class="foot">Version 2. Video buttons open a YouTube search for that exercise's form tutorial; pick a short video from a trainer channel (Jeff Nippard, Renaissance Periodization, Athlean-X). Exercise photos: free-exercise-db (public domain). Get clearance from your surgeon or physio before lifting with the left arm, and stop any exercise that causes sharp pain.</p>
+</div>
+
+<div class="timer" id="timer" hidden>
+  <span>Rest</span><b id="tleft">1:30</b>
+  <button type="button" id="tadd">+30s</button>
+  <button type="button" id="tstop">Done</button>
+</div>
+
+<script>
+const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q + " proper form tutorial");
+const PRINT = location.hash === "#print";
+const IMG = q => "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q + " exercise form");
+
+const E = (n, sets, reps, rest, tempo, cues, avoid, alt, elbow, q) => ({n, sets, reps, rest, tempo, cues, avoid, alt, elbow, q: q || n});
+
+const WARM_UP = {
+  upper: ["5 min easy rower or bike to get warm", "Wrist circles ×10 each way, then make a fist and open ×10", "Forearm rotations ×15: hold a light dumbbell by one end, turn palm up, palm down (left arm first)", "Light band curls ×20 and light band pushdowns ×20, slow and pain-free", "Band pull-aparts ×15", "Ramp-up sets on your first exercise: 40% ×15, 60% ×10, 80% ×5"],
+  lower: ["5 min easy bike or treadmill", "Bodyweight squats ×15", "Leg swings ×10 each leg, front-back and side-side", "Glute bridges ×15", "Ramp-up sets on your first exercise: 40% ×15, 60% ×10, 80% ×5"]
+};
+
+const DAYS = [
+ { id:"mon", d:"Mon", tag:"Chest", type:"push", title:"Chest & Triceps", time:"60–70 min", warm:"upper",
+   parts:["Warm-up 10", "Weights 40–45", "Abs 8", "Cardio 15"],
+   main:[
+    E("Machine Chest Press",4,"8–12",90,"3-0-1-1",["Set the seat so the handles line up with mid-chest","Lower for 3 seconds until you feel a stretch across the chest","Press without locking the elbows hard, squeeze for 1 second"],"Slamming the stack or bouncing out of the bottom",["Neutral-grip dumbbell press", "Smith machine bench press", "Flat dumbbell fly"],"Use the neutral (palms facing) handles if the machine has them. Stop just short of full lockout."),
+    E("Incline Dumbbell Press",3,"10–12",90,"3-1-1-0",["Bench at 30°, palms facing each other or slightly turned in","Lower to the upper chest and pause 1 second in the stretch","Press up and slightly together"],"Bench too steep, flaring elbows straight out",["Incline machine press", "Incline Smith machine press", "Low-to-high cable fly"],"Neutral grip takes most of the strain off the elbow. If the left arm tires first, end the set there for both arms."),
+    E("Pec Deck Fly",3,"12–15",60,"2-0-1-2",["Elbows slightly bent and fixed, like hugging a tree","Bring the handles together and squeeze hard for 2 seconds","Open slowly until you feel a chest stretch"],"Opening so far that your shoulders feel pulled",["Cable chest fly", "Flat dumbbell fly", "Machine chest press, light"],"Keep the elbow angle locked; the shoulder does the work, not the elbow. Last set: drop the weight 30% and keep going."),
+    E("Low-to-High Cable Fly",3,"15",45,"2-0-1-1",["Cables at the lowest setting, step forward","Sweep hands up and together to chin height","Squeeze the upper chest at the top"],"Turning it into a front raise with straight arms",["Incline dumbbell fly", "Incline machine press", "Pec deck, seat raised"],"Light weight, soft elbow. Great pump with almost no elbow stress."),
+    E("Single-Arm Cable Pushdown",3,"12–15 /side",45,"2-0-1-1",["Stand side-on, elbow pinned to your side","Push down until the arm is straight, squeeze for 1 second","Let it rise only to 90°"],"Leaning your body over the handle",["Rope pushdown, light", "V-bar pushdown", "Machine triceps extension"],"Start with the left arm, pick a weight it handles pain-free, then match it with the right."),
+    E("Machine Triceps Extension",3,"12–15",60,"2-0-1-1",["Elbows on the pad, back flat","Extend smoothly to almost straight","Return slowly to about 90°"],"Jerking the weight from the bottom",["Rope pushdown", "Straight-bar pushdown", "Single-arm cable pushdown"],"If the deep bend at the start feels sharp, start the rep from a little further out.")
+   ],
+   core:[
+    E("Decline Crunch",3,"15",45,"2-0-1-1",["Feet hooked, hands across chest","Curl your ribs toward your hips, not just your head forward","Lower slowly"],"Pulling on your neck",["Cable crunch", "Ab crunch machine", "Weighted crunch"],""),
+    E("Pallof Press",3,"12 /side",45,"hold 2 s",["Stand side-on to a cable at chest height","Press the handle straight out and hold 2 seconds","Don't let the cable twist you"],"Rotating your hips toward the cable",["Band Pallof press", "Side plank", "Cable woodchop, light"],"Light weight; this is an oblique exercise, the arms just hold.")
+   ],
+   cardio:"Incline treadmill walk or stair climber, 15 min, steady pace you can talk at.", cardioShort:"15 min incline walk"
+ },
+ { id:"tue", d:"Tue", tag:"Back", type:"pull", title:"Back & Biceps", time:"60–70 min", warm:"upper",
+   parts:["Warm-up 10", "Weights 40–45", "Abs 8", "Cardio 15"],
+   main:[
+    E("Machine High Row",4,"10–12",90,"2-0-1-2",["Chest against the pad, grab the handles","Drive elbows down and back, squeeze the lats for 2 seconds","Let the arms rise fully for a stretch"],"Shrugging the shoulders up to your ears",["Lat pulldown, neutral grip", "Assisted pull-up machine", "One-arm lat pulldown"],"Use a strap or lighter weight if the left grip or elbow gives out first."),
+    E("Chest-Supported T-Bar Row",4,"8–12",90,"2-0-1-1",["Chest on the pad, neutral handles","Pull to the lower chest, squeezing shoulder blades together","Lower all the way for a full stretch"],"Lifting your chest off the pad to cheat the weight up",["Chest-supported dumbbell row", "Machine row", "Seated cable row, neutral grip"],"The pad takes your lower back out of it so you can focus on the squeeze, not the load."),
+    E("One-Arm Lat Pulldown",3,"12 /side",60,"2-0-1-1",["Kneel or sit under a high cable, one handle","Pull elbow down to your side, slightly behind you","Reach all the way up for the stretch"],"Twisting your torso to finish the rep",["Lat pulldown, neutral grip", "Machine high row", "Straight-arm cable pulldown"],"One arm at a time lets the left side go lighter without holding the right side back."),
+    E("Seated One-Arm Cable Row",3,"12 /side",60,"2-0-1-2",["Sit tall, one handle at a time","Row to your hip, elbow close to the body","Let the shoulder reach forward for a stretch"],"Rocking back with the whole torso",["Chest-supported machine row", "One-arm dumbbell row", "Seated cable row"],"Don't let the left elbow snap straight at the front; keep it soft."),
+    E("Reverse Machine Fly",3,"15",45,"2-0-1-2",["Face the pad, arms out at shoulder height","Sweep back until your arms are in line with your body","Squeeze the rear delts for 2 seconds"],"Going heavy and swinging",["Cable rear delt fly", "Bent-over dumbbell rear fly", "Face pull"],""),
+    E("Cable Rope Hammer Curl",3,"12–15",60,"2-0-1-2",["Rope on the low cable, palms facing each other","Curl up keeping elbows at your sides","Squeeze for 2 seconds, then lower for 2"],"Elbows drifting forward",["Dumbbell hammer curl", "Cross-body hammer curl", "Cable curl"],"Neutral (hammer) grip is the most elbow-friendly curl. This is your main biceps exercise."),
+    E("Concentration Curl",2,"12–15 /side",45,"3-0-1-1",["Sit, elbow braced on your inner thigh","Curl up and squeeze hard at the top","Lower for 3 seconds, stop just short of fully straight"],"Swinging the shoulder to lift",["Cable curl", "Machine preacher curl, light", "Incline dumbbell curl"],"Left arm first, lighter. Never let the dumbbell drop into a straight elbow.")
+   ],
+   core:[
+    E("Captain's Chair Knee Raise",3,"12–15",45,"2-0-1-1",["Forearms on the pads, back against the rest","Lift knees up and curl the pelvis toward you","Lower slowly, don't swing"],"Swinging the legs with momentum",["Lying leg raise", "Reverse crunch", "Decline bench reverse crunch"],"Your forearms support you on the pads, so there's no hanging strain on the elbow."),
+    E("Leg Pull-In",3,"15",45,"2-0-1-1",["Sit on the edge of a bench, lean back slightly","Pull knees toward your chest","Extend legs out without touching the floor"],"Rounding your shoulders forward",["Reverse crunch", "Flat bench leg raise", "Dead bug"],"")
+   ],
+   cardio:"Incline treadmill walk, 15 min. Incline 8–12%, speed 4.5–5.5 km/h.", cardioShort:"15 min incline walk"
+ },
+ { id:"wed", d:"Wed", tag:"Legs", type:"legs", title:"Legs & Abs", time:"55–65 min", warm:"lower",
+   parts:["Warm-up 10", "Weights 35–40", "Abs 8", "Cardio 10"],
+   main:[
+    E("Hack Squat",4,"8–12",120,"3-0-1-0",["Shoulders under the pads, feet shoulder-width","Lower for 3 seconds to at least parallel","Drive up through the whole foot"],"Knees caving in, heels lifting",["Leg press", "Smith machine squat", "Goblet squat"],"No barbell to hold, so your elbows stay out of it. Better choice than back squats for your arm."),
+    E("Barbell Hip Thrust",3,"10–12",90,"2-0-1-2",["Upper back on a bench, bar padded over the hips","Drive hips up until your body is flat, squeeze glutes 2 seconds","Lower under control"],"Arching the lower back at the top",["Glute bridge machine", "Smith machine hip thrust", "Dumbbell hip thrust"],"Hands only steady the bar; they don't carry weight."),
+    E("Leg Extension",3,"15",60,"2-0-1-2",["Pad just above the ankles","Kick up and squeeze the quads hard for 2 seconds","Lower slowly"],"Swinging the weight up",["Sissy squat, assisted", "Leg press, feet low", "Goblet squat, heels raised"],"Last set: drop the weight 30% and go again."),
+    E("Seated Leg Curl",3,"12–15",60,"2-0-1-2",["Lock your thighs under the pad","Curl heels down and back, squeeze 2 seconds","Return slowly"],"Lifting hips off the seat",["Lying leg curl", "Standing leg curl", "Stability-ball leg curl"],""),
+    E("Calf Press on Leg Press",4,"15–20",45,"2-2-1-1",["Balls of feet on the bottom edge of the platform","Lower heels for a 2-second stretch, pause","Press up high and squeeze"],"Bouncing through short reps",["Standing calf raise", "Seated calf raise", "Smith machine calf raise"],"")
+   ],
+   core:[
+    E("Weighted Crunch",3,"15",45,"2-0-1-1",["Hold a plate on your chest","Curl your ribs toward your hips","Lower slowly"],"Pulling with your neck",["Cable crunch", "Ab crunch machine", "Decline crunch"],"Hold the plate against your chest with both hands, elbows tucked; no strain."),
+    E("Flat Bench Leg Raise",3,"15",45,"2-0-1-1",["Lie on a bench, hold the sides behind your head","Raise straight legs to vertical","Lower until just above the bench"],"Lower back arching off the bench",["Reverse crunch", "Captain's chair knee raise", "Dead bug"],"")
+   ],
+   cardio:"Easy bike, 10 min.", cardioShort:"10 min easy bike"
+ },
+ { id:"thu", d:"Thu", tag:"Delts", type:"push", title:"Shoulders & Arms", time:"60–70 min", warm:"upper",
+   parts:["Warm-up 10", "Weights 40–45", "Abs 6", "Cardio 15"],
+   main:[
+    E("Machine Shoulder Press",4,"8–12",90,"3-0-1-0",["Seat set so handles start at shoulder height","Press up without fully locking out","Lower for 3 seconds"],"Arching your back off the pad",["Smith machine seated press", "Neutral-grip dumbbell press", "Landmine press"],"Neutral handles if possible. Stop 2–3 cm short of lockout to keep tension on the delts and off the elbow."),
+    E("Dumbbell Lateral Raise",4,"12–15",45,"2-0-1-1",["Slight bend in the elbows, locked in place","Raise out to the side to shoulder height, leading with the elbows","Lower for 2 seconds"],"Swinging or shrugging",["Cable lateral raise", "Lateral raise machine", "Band lateral raise"],"Light weight and a fixed elbow, so very little joint stress. Last set: myo-reps (rest 5 breaths, 4–5 more reps, repeat 3 times)."),
+    E("Cable Rear Delt Fly",3,"15",45,"2-0-1-2",["Cables at shoulder height, cross them over","Pull back and out until arms are in line with your shoulders","Squeeze 2 seconds"],"Turning it into a row by bending the elbows",["Reverse machine fly", "Face pull", "Bent-over dumbbell rear fly"],""),
+    E("Standing Cable Curl",3,"12–15",60,"2-0-1-2",["Straight or EZ handle on a low cable","Curl up, elbows pinned","Lower for 2 seconds, stop just short of straight"],"Leaning back to finish reps",["Cable rope hammer curl", "Dumbbell hammer curl", "Machine preacher curl, light"],"If a palms-up grip hurts the left elbow, swap to the rope hammer version."),
+    E("V-Bar Pushdown",3,"12–15",60,"2-0-1-1",["Elbows at your sides","Push down to straight arms, squeeze","Let it rise to just past 90°"],"Elbows flaring out or moving forward",["Rope pushdown", "Single-arm cable pushdown", "Machine triceps extension"],"Swap for the rope if the V-bar angle feels off on the left side."),
+    E("Cross-Body Hammer Curl",2,"12 /side",45,"2-0-1-1",["Curl the dumbbell across your body toward the opposite chest","Squeeze at the top","Lower slowly"],"Swinging the shoulder",["Cable rope hammer curl", "Dumbbell hammer curl", "Concentration curl"],"Neutral grip, left arm first.")
+   ],
+   core:[
+    E("Cable Woodchop",3,"12 /side",45,"2-0-1-1",["Cable at shoulder height, stand side-on","Rotate through your torso to pull the handle down and across","Control it back"],"Pulling with the arms instead of turning the torso",["Pallof press", "Russian twist", "Side plank"],"Light weight, arms stay fairly straight; your obliques do the work.",
+     "cable woodchop")
+   ],
+   cardio:"Incline treadmill walk or stair climber, 15 min.", cardioShort:"15 min incline walk"
+ },
+ { id:"fri", d:"Fri", tag:"Upper", type:"pull", title:"Chest & Back Pump", time:"60–70 min", warm:"upper",
+   parts:["Warm-up 10", "Weights 40–45", "Abs 6", "Cardio 15"],
+   main:[
+    E("Smith Machine Incline Press",4,"8–10",90,"3-1-1-0",["Bench at 30°, bar lines up with the upper chest","Lower for 3 seconds, 1-second pause just above the chest","Press up without locking out hard"],"Bench too steep, bouncing the bar",["Incline dumbbell press, neutral grip", "Incline machine press", "Low-to-high cable fly"],"Slightly narrower than normal grip but not close-grip. If the left elbow complains, switch to neutral-grip dumbbells."),
+    E("Lat Pulldown, Neutral Grip",4,"10–12",90,"2-0-1-2",["Use the V-handle or parallel-grip bar","Pull to the upper chest, squeeze the lats","Let the arms rise fully"],"Leaning far back",["Machine high row", "One-arm lat pulldown", "Assisted pull-up machine"],"Neutral grip is easier on the elbow than a wide overhand bar.","close grip lat pulldown"),
+    E("Decline Machine Press",3,"10–12",60,"2-0-1-1",["Handles at lower chest","Press out and squeeze","Return slowly"],"Locking out hard",["Cable crossover, high-to-low", "Machine chest press", "Dumbbell bench press, neutral grip"],""),
+    E("Chest-Supported Dumbbell Row",3,"10–12",60,"2-0-1-2",["Lie face down on a 30° bench","Row the dumbbells to your hips","Squeeze shoulder blades 2 seconds"],"Lifting your chest off the bench",["Chest-supported T-bar row", "Machine row", "Seated one-arm cable row"],""),
+    E("Cable Crossover",3,"15",45,"2-0-1-2",["Cables high, step forward","Bring hands together in front of your belly button","Squeeze 2 seconds, open slowly"],"Pressing instead of flying",["Pec deck fly", "Low-to-high cable fly", "Flat dumbbell fly"],"Elbows soft and fixed. Last set: drop set."),
+    E("Machine Iso Row",3,"12–15 /side",45,"2-0-1-2",["One arm at a time, chest on the pad","Row back until your elbow passes your body","Squeeze, then reach forward for a stretch"],"Twisting off the pad",["Seated one-arm cable row", "One-arm dumbbell row", "Machine high row"],"")
+   ],
+   core:[
+    E("Decline Reverse Crunch",3,"15",45,"2-0-1-1",["Head at the top of a decline bench, hold the bench","Curl knees to chest and lift the hips","Lower slowly"],"Swinging the legs",["Reverse crunch", "Captain's chair knee raise", "Leg pull-in"],"Grip lightly with the left hand; you're not hanging.")
+   ],
+   cardio:"Incline treadmill walk, 15 min.", cardioShort:"15 min incline walk"
+ },
+ { id:"sat", d:"Sat", tag:"Arms", type:"legs", title:"Delts, Arms & Abs", time:"50–60 min", warm:"upper",
+   parts:["Warm-up 10", "Weights 30–35", "Abs 10", "Cardio 10"],
+   main:[
+    E("Neutral-Grip Dumbbell Shoulder Press",3,"10–12",90,"3-0-1-0",["Bench almost upright, palms facing each other","Press up and slightly in","Lower to ear level"],"Arching your back",["Machine shoulder press", "Landmine press", "Smith machine seated press"],"Neutral grip is the elbow-friendly version of the press."),
+    E("Band Lateral Raise",3,"20",30,"1-0-1-1",["Stand on a band, hold the ends","Raise out to shoulder height","Lower with control"],"Shrugging",["Dumbbell lateral raise", "Cable lateral raise", "Lateral raise machine"],"High reps, short rest: this one is for the pump."),
+    E("Reverse Dumbbell Fly",3,"15",45,"2-0-1-2",["Hinge forward, chest close to your thighs or on an incline bench","Raise dumbbells out to the sides","Squeeze the rear delts"],"Using momentum",["Cable rear delt fly", "Reverse machine fly", "Face pull"],""),
+    E("Face Pull",3,"15",45,"2-0-1-2",["Rope at eye level","Pull toward your face, hands by your ears","Thumbs point back at the end"],"Going heavy",["Band face pull", "Reverse machine fly", "Cable rear delt fly"],""),
+    E("Dumbbell Hammer Curl",3,"12",60,"2-0-1-2",["Palms facing each other","Curl to shoulder height, squeeze","Lower for 2 seconds"],"Elbows moving forward",["Cable rope hammer curl", "Cross-body hammer curl", "Cable curl"],"Alternate arms and start with the left."),
+    E("Rope Pushdown",3,"15",45,"2-0-1-2",["Elbows pinned","Push down and spread the rope at the bottom","Squeeze 2 seconds"],"Leaning your weight into it",["V-bar pushdown", "Single-arm cable pushdown", "Machine triceps extension"],"Finish biceps and triceps with one light drop set each if the elbow feels fine.")
+   ],
+   core:[
+    E("Ab Crunch Machine",3,"15",45,"2-0-1-2",["Set the seat so the pads sit on your chest","Crunch down by curling the ribs to the hips","Return slowly"],"Pulling with your arms",["Cable crunch", "Weighted crunch", "Decline crunch"],"Let your torso do the work; the arms only hold."),
+    E("Russian Twist",3,"20 total",45,"controlled",["Sit, lean back slightly, feet on or off the floor","Rotate your shoulders side to side","Hold a light plate only if it's easy"],"Moving only the arms, not the torso",["Cable woodchop", "Pallof press", "Side plank"],"Hold the weight close to your chest with elbows bent and relaxed.","russian twist")
+   ],
+   cardio:"Easy bike or brisk walk, 10 min.", cardioShort:"10 min easy bike"
+ },
+ { id:"sun", d:"Sun", tag:"Rest", type:"rest", title:"Rest & Elbow Care", time:"15–20 min, optional", rest:true,
+   main:[
+    E("Wrist Flexor Stretch",2,"30 s /arm",0,"",["Arm straight in front, palm up","Gently pull the fingers back with the other hand","Feel it in the inner forearm"],"Forcing it into pain",["Prayer stretch", "Wall forearm stretch"],"Do the left arm gently and only as far as is comfortable.","wrist flexor stretch"),
+    E("Wrist Extensor Stretch",2,"30 s /arm",0,"",["Arm straight, palm down","Gently press the back of the hand down","Feel it on top of the forearm"],"Bouncing",["Reverse prayer stretch", "Wall forearm stretch"],"","wrist extensor stretch"),
+    E("Forearm Rotations",2,"15 /arm",0,"slow",["Hold a light dumbbell or hammer by one end, elbow at your side bent 90°","Turn palm up, then palm down, slowly","Keep the elbow still"],"Using a heavy weight",["Rotations with no weight", "Band rotations"],"Good for elbow range of motion after surgery. Stop if sharp pain.","forearm supination pronation dumbbell"),
+    E("Stick Chest & Shoulder Stretch",2,"10 slow reps",0,"",["Hold a broomstick or band with a wide grip","Keep arms straight, lift overhead then back as far as is comfortable","Widen your grip if it feels tight"],"Bending the elbows or forcing past a pinch",["Doorway chest stretch", "Wall shoulder slides"],""),
+    E("Child's Pose",1,"60 s",0,"",["Knees wide, sit back toward heels","Arms stretched forward","Breathe into your back"],"",["Puppy pose", "Lying knees-to-chest hug"],"")
+   ],
+   core:[],
+   cardio:"Walk 8,000–10,000 steps. Total rest is fine too; muscle is built while you recover.", cardioShort:"8–10k steps"
+ }
+];
+
+const PHOTO = {"Machine Chest Press":"Leverage_Chest_Press","Incline Dumbbell Press":"Incline_Dumbbell_Press","Pec Deck Fly":"Butterfly","Low-to-High Cable Fly":"Low_Cable_Crossover","Single-Arm Cable Pushdown":"Triceps_Pushdown","Machine Triceps Extension":"Machine_Triceps_Extension","Decline Crunch":"Decline_Crunch","Pallof Press":"Pallof_Press","Machine High Row":"Leverage_High_Row","Chest-Supported T-Bar Row":"Lying_T-Bar_Row","One-Arm Lat Pulldown":"One_Arm_Lat_Pulldown","Seated One-Arm Cable Row":"Seated_One-arm_Cable_Pulley_Rows","Reverse Machine Fly":"Reverse_Machine_Flyes","Cable Rope Hammer Curl":"Cable_Hammer_Curls_-_Rope_Attachment","Concentration Curl":"Concentration_Curls","Captain's Chair Knee Raise":"Knee_Hip_Raise_On_Parallel_Bars","Leg Pull-In":"Leg_Pull-In","Hack Squat":"Hack_Squat","Barbell Hip Thrust":"Barbell_Hip_Thrust","Leg Extension":"Leg_Extensions","Seated Leg Curl":"Seated_Leg_Curl","Calf Press on Leg Press":"Calf_Press_On_The_Leg_Press_Machine","Weighted Crunch":"Weighted_Crunches","Flat Bench Leg Raise":"Flat_Bench_Lying_Leg_Raise","Machine Shoulder Press":"Machine_Shoulder_Military_Press","Dumbbell Lateral Raise":"Side_Lateral_Raise","Cable Rear Delt Fly":"Cable_Rear_Delt_Fly","Standing Cable Curl":"Standing_Biceps_Cable_Curl","V-Bar Pushdown":"Triceps_Pushdown_-_V-Bar_Attachment","Cross-Body Hammer Curl":"Cross_Body_Hammer_Curl","Smith Machine Incline Press":"Smith_Machine_Incline_Bench_Press","Lat Pulldown, Neutral Grip":"Wide-Grip_Lat_Pulldown","Decline Machine Press":"Leverage_Decline_Chest_Press","Chest-Supported Dumbbell Row":"Dumbbell_Incline_Row","Cable Crossover":"Cable_Crossover","Machine Iso Row":"Leverage_Iso_Row","Decline Reverse Crunch":"Decline_Reverse_Crunch","Neutral-Grip Dumbbell Shoulder Press":"Dumbbell_Shoulder_Press","Band Lateral Raise":"Lateral_Raise_-_With_Bands","Reverse Dumbbell Fly":"Reverse_Flyes","Face Pull":"Face_Pull","Dumbbell Hammer Curl":"Hammer_Curls","Rope Pushdown":"Triceps_Pushdown_-_Rope_Attachment","Ab Crunch Machine":"Ab_Crunch_Machine","Stick Chest & Shoulder Stretch":"Chest_And_Front_Of_Shoulder_Stretch","Child's Pose":"Childs_Pose"};
+const PHOTO_NOTE = {"Single-Arm Cable Pushdown":"Photo shows the two-handed version; use one handle and one arm.","Lat Pulldown, Neutral Grip":"Photo shows a wide bar; swap it for the V-handle or parallel-grip bar.","Incline Dumbbell Press":"Turn your palms to face each other (neutral grip) for your elbow.","Neutral-Grip Dumbbell Shoulder Press":"Photo shows palms forward; turn them to face each other.","Machine Iso Row":"Do one arm at a time."};
+
+const ALT_PHOTO = {"45° back extension": "Hyperextensions_Back_Extensions", "Ab crunch machine": "Ab_Crunch_Machine", "Arnold press": "Arnold_Dumbbell_Press", "Assisted dip machine": "Dip_Machine", "Band face pull": ["Face_Pull", "Photo shows the cable version; same movement with a band."], "Band lateral raise": "Lateral_Raise_-_With_Bands", "Band-assisted pull-up": "Band_Assisted_Pull-Up", "Barbell bench press": "Barbell_Bench_Press_-_Medium_Grip", "Bench dips": "Bench_Dips", "Bent-over dumbbell row": "Bent_Over_Two-Dumbbell_Row", "Cable Pallof press": "Pallof_Press", "Cable curl": "Standing_Biceps_Cable_Curl", "Cable lateral raise": ["Side_Lateral_Raise", "Photo shows the dumbbell version; the movement is the same."], "Cable pull-through": "Pull_Through", "Cable rear delt fly": "Cable_Rear_Delt_Fly", "Calf raise on leg press": "Calf_Press_On_The_Leg_Press_Machine", "Captain's chair knee raise": "Knee_Hip_Raise_On_Parallel_Bars", "Chest-supported T-bar row": "Lying_T-Bar_Row", "Chest-supported dumbbell row": "Dumbbell_Incline_Row", "Chest-supported machine row": "Leverage_Iso_Row", "Close-grip bench press": "Close-Grip_Barbell_Bench_Press", "Concentration curl": "Concentration_Curls", "Cross-body hammer curl": "Cross_Body_Hammer_Curl", "Decline bench reverse crunch": "Decline_Reverse_Crunch", "Decline machine press": "Leverage_Decline_Chest_Press", "Decline sit-up": ["Decline_Crunch", "Photo shows a decline crunch; for a sit-up, come all the way up."], "Dumbbell Romanian deadlift": "Stiff-Legged_Dumbbell_Deadlift", "Dumbbell bench press": "Dumbbell_Bench_Press", "Dumbbell hip thrust": ["Barbell_Hip_Thrust", "Photo shows the barbell version; hold a dumbbell on your hips instead."], "Dumbbell lateral raise": "Side_Lateral_Raise", "EZ-bar curl": "EZ-Bar_Curl", "EZ-bar overhead extension": "Standing_Overhead_Barbell_Triceps_Extension", "Face pull": "Face_Pull", "Flat dumbbell fly": "Dumbbell_Flyes", "Glute bridge machine": ["Barbell_Glute_Bridge", "Photo shows a barbell glute bridge; the machine follows the same path."], "Goblet squat": "Goblet_Squat", "Hack squat": "Hack_Squat", "Hanging knee raise": "Hanging_Leg_Raise", "Heels-raised goblet squat": ["Goblet_Squat", "Stand with your heels on a small plate to push the work into your quads."], "Incline Smith machine press": "Smith_Machine_Incline_Bench_Press", "Incline machine press": "Leverage_Incline_Chest_Press", "Inverted row on a Smith bar": "Inverted_Row", "Lat pulldown": "Wide-Grip_Lat_Pulldown", "Long-lever plank": ["Plank", "Same as a plank, but place your elbows a few inches further forward."], "Low-to-high cable fly": "Low_Cable_Crossover", "Lying knee tuck": "Leg_Pull-In", "Lying knees-to-chest hug": "Hug_Knees_To_Chest", "Lying leg raise": "Flat_Bench_Lying_Leg_Raise", "Machine chest press": "Leverage_Chest_Press", "Machine high row": "Leverage_High_Row", "Machine row": "Leverage_Iso_Row", "Machine shoulder press": "Machine_Shoulder_Military_Press", "Overhead cable extension": "Cable_Rope_Overhead_Triceps_Extension", "Pec deck machine": "Butterfly", "Preacher curl machine": "Machine_Preacher_Curls", "Push-ups": "Pushups", "Push-ups (feet raised for harder)": "Push-Ups_With_Feet_Elevated", "Rack pull from knee height": "Rack_Pulls", "Reverse pec deck": "Reverse_Machine_Flyes", "Reverse-grip EZ-bar curl": "Reverse_Barbell_Curl", "Rope cable hammer curl": "Cable_Hammer_Curls_-_Rope_Attachment", "Seated dumbbell calf raise": "Dumbbell_Seated_One-Leg_Calf_Raise", "Seated dumbbell shoulder press": "Dumbbell_Shoulder_Press", "Seated forward fold": "Seated_Floor_Hamstring_Stretch", "Seated leg curl": "Seated_Leg_Curl", "Side plank on knees": ["Side_Bridge", "Photo shows a full side plank; rest on your bent knees instead of your feet."], "Single-arm cable pulldown": "One_Arm_Lat_Pulldown", "Single-arm cable row": "Seated_One-arm_Cable_Pulley_Rows", "Single-leg dead bug": ["Dead_Bug", "Move only the legs, one at a time; keep arms still."], "Sissy squat holding a rail": "Weighted_Sissy_Squat", "Smith machine bench press": "Smith_Machine_Bench_Press", "Smith machine calf raise": "Smith_Machine_Calf_Raise", "Smith machine seated press": "Smith_Machine_Overhead_Shoulder_Press", "Smith machine split squat": "Smith_Single-Leg_Split_Squat", "Smith machine squat": "Smith_Machine_Squat", "Stability-ball leg curl": "Ball_Leg_Curl", "Standing calf raise": "Standing_Calf_Raises", "Standing dumbbell curl": "Dumbbell_Bicep_Curl", "Standing hamstring stretch, heel on a bench": "Standing_Hamstring_and_Calf_Stretch", "Standing lunge stretch": "Standing_Hip_Flexors", "Standing single-leg curl machine": "Standing_Leg_Curl", "Stationary lunges": "Dumbbell_Lunges", "Step-up onto a bench": "Dumbbell_Step_Ups", "Step-ups": "Dumbbell_Step_Ups", "Straight-bar pushdown": "Triceps_Pushdown", "Suitcase carry": ["Farmers_Walk", "Photo shows a farmer's walk; carry the weight in one hand only and stay upright."], "T-bar row": "Bent_Over_Two-Arm_Long_Bar_Row", "Trap-bar deadlift": "Trap_Bar_Deadlift", "Triceps extension machine": "Machine_Triceps_Extension", "V-bar pushdown": "Triceps_Pushdown_-_V-Bar_Attachment", "Weighted floor crunch": "Weighted_Crunches", "Leg press": "Leg_Press", "Bulgarian split squat (when ready)": ["Split_Squats", "Photo shows a split squat; for the Bulgarian version, rest your back foot on a bench."], "Barbell hip thrust (when ready)": "Barbell_Hip_Thrust", "Lying leg curl": "Lying_Leg_Curls", "Band lateral walk": ["Monster_Walk", "Photo shows a band walk; step sideways instead of forward."]};
+const COLOR = {push:"var(--push)", pull:"var(--pull)", legs:"var(--legs)", rest:"var(--rest)"};
+const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2" fill="currentColor"/><path d="M21 16l-5-5-8 8"/></svg>';
+const ICON_TIMER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>';
+
+const store = {
+  get(k, f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let done = store.get("v2-done", {});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtRest = s => s >= 60 ? (s % 60 ? `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")} min` : `${s/60} min`) : `${s} s`;
+
+function pics(id, name){
+  const f = (n, cap) => `<figure><img src="ex/${id}_${n}.jpg" alt="${esc(name)}, ${cap.toLowerCase()} position" loading="lazy" width="480" height="320"><figcaption>${cap}</figcaption></figure>`;
+  return `<div class="ph">${f(0,"Start")}${f(1,"Finish")}</div>`;
+}
+function photo(ex){
+  const id = PHOTO[ex.n];
+  if (!id) return "";
+  return `${pics(id, ex.n)}${PHOTO_NOTE[ex.n] ? `<div class="alt">${esc(PHOTO_NOTE[ex.n])}</div>` : ""}`;
+}
+
+function swaps(ex, dayId){
+  if (!ex.alt.length) return "";
+  const label = dayId === "sun" ? "Or try" : "Machine busy? Swap for";
+  if (PRINT) return `<div class="alt">${label} (tap a name for its video): ${ex.alt.map(a => `<a href="${YT(a)}"><b>${esc(a)}</b></a>`).join(" · ")}</div>`;
+  const rows = ex.alt.map(a => {
+    const m = ALT_PHOTO[a], id = m && (typeof m === "string" ? m : m[0]), note = m && typeof m !== "string" ? m[1] : "";
+    return `<details class="swap"><summary>${esc(a)}</summary><div class="swap-body">
+      ${id ? pics(id, a) : ""}${note ? `<div class="alt">${esc(note)}</div>` : ""}
+      <div class="row"><a class="btn primary" href="${YT(a)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
+      ${id ? "" : `<a class="btn" href="${IMG(a)}" target="_blank" rel="noopener">${ICON_IMG}See photos</a>`}</div></div></details>`;
+  }).join("");
+  return `<div class="swaps"><div class="alt">${label} (tap for photos and video):</div>${rows}</div>`;
+}
+
+function card(dayId, ex, i){
+  const key = `${dayId}-${i}`;
+  const got = done[key] || [];
+  const sets = Array.from({length: ex.sets}, (_, s) =>
+    `<button type="button" class="set" data-k="${key}" data-s="${s}" aria-pressed="${got.includes(s)}" aria-label="Set ${s+1} done">${s+1}</button>`).join("");
+  const complete = got.length === ex.sets;
+  return `<article class="card${complete ? " is-done" : ""}" id="c-${key}">
+    <div class="ex-top"><h3>${esc(ex.n)}</h3>
+      <div class="dose">${ex.sets} × ${esc(ex.reps)}${ex.rest ? `<span>rest ${fmtRest(ex.rest)}</span>` : ""}${ex.tempo ? `<span>tempo ${esc(ex.tempo)}</span>` : ""}</div></div>
+    ${photo(ex)}
+    <ol class="cues">${ex.cues.map(c => `<li>${esc(c)}</li>`).join("")}</ol>
+    ${ex.avoid ? `<div class="avoid"><b>Avoid:</b> ${esc(ex.avoid)}</div>` : ""}
+    ${ex.elbow ? `<div class="avoid elbow"><b>Left elbow:</b> ${esc(ex.elbow)}</div>` : ""}
+    <div class="row">
+      <a class="btn primary" href="${YT(ex.q)}" target="_blank" rel="noopener">${ICON_PLAY}Watch how</a>
+      ${ex.rest ? `<button type="button" class="btn rest-btn" data-rest="${ex.rest}">${ICON_TIMER}Rest timer</button>` : ""}
+    </div>
+    <div class="sets" aria-label="Sets completed">${sets}</div>
+    ${swaps(ex, dayId)}
+  </article>`;
+}
+
+function renderDay(day){
+  const v = document.getElementById("view");
+  v.style.setProperty("--c", COLOR[day.type]);
+  v.innerHTML = dayHTML(day);
+}
+function dayHTML(day){
+  const warm = day.warm ? `<section class="block"><div class="eyebrow"><span>Warm-up · 8–10 min</span></div>
+      <div class="plain"><ol>${WARM_UP[day.warm].map(w => `<li>${esc(w)}</li>`).join("")}</ol></div></section>` : "";
+  const mainList = day.main.map((e,i) => card(day.id, e, i)).join("");
+  const coreList = day.core.map((e,i) => card(day.id, e, 100+i)).join("");
+  const totalSets = [...day.main, ...day.core].reduce((a,e) => a + e.sets, 0);
+  return `
+    <div class="dayhead"><div class="eyebrow">${day.d}</div><h2>${esc(day.title)}</h2>
+      <div class="meta"><span class="pill">${day.time}</span>${day.rest ? "" : `<span class="pill">${totalSets} working sets</span><span class="pill">${day.main.length + day.core.length} exercises</span>`}</div>
+      ${day.rest ? "" : `<div class="meta">${day.parts.map(p => `<span class="pill">${p} min</span>`).join("")}</div>`}</div>
+    ${warm}
+    <section class="block"><div class="eyebrow"><span>${day.rest ? "Elbow & mobility routine" : "Main lifts"}</span><button type="button" class="btn" id="reset">Clear ticks</button></div>${mainList}</section>
+    ${coreList ? `<section class="block"><div class="eyebrow"><span>Abs & obliques</span></div>${coreList}</section>` : ""}
+    <section class="block"><div class="eyebrow"><span>${day.rest ? "Activity" : "Cardio · finish here"}</span></div><div class="plain">${esc(day.cardio)}</div></section>`;
+}
+
+function renderGuide(){
+  const v = document.getElementById("view");
+  v.style.setProperty("--c", "var(--pull)");
+  v.innerHTML = guideHTML();
+  bindCalc();
+}
+function guideHTML(){
+  return `<div class="guide">
+  <div class="dayhead"><div class="eyebrow">Read once, then check weekly</div><h2>How Version 2 works</h2></div>
+
+  <section><h3>The week</h3>
+    <div class="tbl"><table><thead><tr><th>Day</th><th>Session</th><th>Cardio</th></tr></thead><tbody>
+    ${DAYS.map(d => `<tr><td>${d.d}</td><td>${esc(d.title)}</td><td>${esc(d.cardioShort)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p>Upper body is trained 5 days a week: chest, back and shoulders twice each, arms three times, legs once. That's where the extra growth will show. Every session also has abs work and a short cardio finish to bring belly fat down.</p>
+  </section>
+
+  <section><h3>How to get the pump</h3>
+    <div class="plain"><ul>
+      <li><b>Tempo</b> is written as 4 numbers, e.g. <b>3-0-1-1</b>: 3 seconds lowering, 0 pause at the bottom, 1 second lifting, 1 second squeeze at the top. Slow lowering = more growth.</li>
+      <li><b>Rest short:</b> 45–90 seconds on most exercises. Use the rest timer on each card.</li>
+      <li><b>Last set intensifiers:</b> where a card says <i>drop set</i> (drop weight 30%, keep going) or <i>myo-reps</i> (rest 5 breaths, 4–5 more reps, three times). Only on machines and cables, never on free-weight presses.</li>
+      <li><b>Feel the muscle:</b> if you can't feel the target muscle working, the weight is too heavy.</li>
+      <li><b>Before training:</b> carbs and water 60–90 min before (banana, rice, oats) make a much bigger pump than any pre-workout.</li>
+    </ul></div>
+  </section>
+
+  <section><h3>Left elbow rules</h3>
+    <div class="note"><b>Get clearance from your surgeon or physio before lifting heavy.</b> Show them this plan. If they give you limits (range of motion, weight, timeline), their advice comes first.</div>
+    <div class="plain"><ul>
+      <li><b>Pain rule:</b> mild discomfort up to 3 out of 10 that's gone by the next morning is OK. Sharp pain, pain that builds during a set, or pain the next day means stop that exercise and use a swap.</li>
+      <li><b>Left arm leads:</b> on one-arm exercises, do the left arm first, pick a weight it handles cleanly, then match the right arm to it.</li>
+      <li><b>Avoid for now:</b> skull crushers, dips, close-grip bench press, heavy straight-bar curls, heavy barbell pressing to hard lockout, behind-the-head extensions.</li>
+      <li><b>Prefer:</b> neutral (palms-facing) grips, machines and cables, stopping just short of full lockout, slow lowering.</li>
+      <li><b>Warm the elbow every session</b> with the forearm rotations and light band curls/pushdowns in the warm-up.</li>
+      <li><b>See a doctor</b> if you get swelling, a locking/catching feeling, loss of movement, or tingling/numbness in the ring and little fingers.</li>
+    </ul></div>
+  </section>
+
+  <section><h3>About belly fat and abs</h3>
+    <div class="note">Ab exercises build the muscle underneath; the fat on top comes off only when your whole body fat drops. That's why the food targets, daily steps and cardio matter as much as the crunches. Measure your waist weekly: if your weight goes up but your waist stays the same or drops, you're building muscle, not fat.</div>
+  </section>
+
+  <section><h3>12-week progression</h3>
+    <div class="tbl"><table><thead><tr><th>Weeks</th><th>Phase</th><th>What to do</th></tr></thead><tbody>
+      <tr><td class="n">1–2</td><td>Groove</td><td>Pick weights you could do 3 more reps with. Learn the tempo and find which swaps feel best on the left elbow.</td></tr>
+      <tr><td class="n">3–6</td><td>Build</td><td>Stop sets 1–2 reps before failure. Add reps first, then weight (rule below). Start using drop sets and myo-reps.</td></tr>
+      <tr><td class="n">7</td><td>Deload</td><td>Same exercises, half the sets, 10–15% lighter. Joints and tendons catch up.</td></tr>
+      <tr><td class="n">8–11</td><td>Push</td><td>Add 1 set per week to chest, back or shoulders, whichever is lagging (max +3 sets each). Keep the elbow pain rule.</td></tr>
+      <tr><td class="n">12</td><td>Deload & check</td><td>Light week, new photos and measurements, then restart at week 3 with your new weights.</td></tr>
+    </tbody></table></div>
+    <p><b>Rule for adding weight:</b> when you hit the top of the rep range (e.g. 12 of 8–12) on every set with clean tempo, go up next session: the next dumbbell, the next pin on machines, or 2.5 kg on bars. <b>Arms and the left side go up slowest.</b> Muscles can grow faster than tendons, especially on a cycle, so don't jump weights.</p>
+  </section>
+
+  <section><h3>Your daily targets</h3>
+    <div class="plain" style="display:grid;gap:12px">
+      <div class="calc">
+        <label for="bw">Body weight (kg)<input id="bw" type="number" inputmode="decimal" min="35" max="200" value="75"></label>
+        <div class="stat"><b id="kcal">–</b><span>calories / day</span></div>
+        <div class="stat"><b id="prot">–</b><span>protein / day</span></div>
+        <div class="stat"><b id="fat">–</b><span>fat / day</span></div>
+        <div class="stat"><b id="carb">–</b><span>carbs / day</span></div>
+        <div class="stat"><b id="water">–</b><span>water / day</span></div>
+      </div>
+      <p style="color:var(--muted);font-size:.9rem">Lean bulk with fat loss means eating close to maintenance with lots of protein, not a big surplus. Check every 2 weeks: if weight is up more than 1 kg and waist is up, cut 200 calories (from carbs). If weight and waist haven't moved, add 150–200 calories.</p>
+    </div>
+  </section>
+
+  <section><h3>Food</h3>
+    <p>Every meal: <b>a palm-to-fist of protein</b>, a fist of carbs (rice, roti, oats, potato), vegetables, and a thumb of fat. Most of your carbs go in the meals before and after training.</p>
+    <div class="tbl"><table><thead><tr><th>Meal</th><th>Non-veg</th><th>Vegetarian</th></tr></thead><tbody>
+      <tr><td>Breakfast</td><td>4 egg whites + 2 whole eggs, 60 g oats with milk, fruit</td><td>Paneer bhurji (150 g) + 2 roti, fruit</td></tr>
+      <tr><td>Lunch</td><td>200 g chicken, 1 cup rice, dal, salad</td><td>Soya chunk curry (60 g dry), 1 cup rice, dal, salad</td></tr>
+      <tr><td>Pre-workout (60–90 min before)</td><td colspan="2">2 bananas or 2 slices bread with peanut butter, plus water</td></tr>
+      <tr><td>Post-workout</td><td>250 g hung curd + fruit, or whey if you use it</td><td>250 g hung curd + fruit, or whey if you use it</td></tr>
+      <tr><td>Dinner</td><td>200 g fish or chicken, 2 roti, sabzi</td><td>Tofu or paneer tikka (150 g), 2 roti, sabzi, dal</td></tr>
+      <tr><td>Before bed (optional)</td><td colspan="2">250 ml milk or a bowl of curd</td></tr>
+    </tbody></table></div>
+    <div class="plain"><b>Cut or limit:</b><ul>
+      <li>Sugary drinks, packaged juices, sweets and bakery items</li>
+      <li>Fried snacks (samosa, pakora, chips)</li>
+      <li>Alcohol: it slows fat loss and recovery, and adds load on the liver, especially on a cycle</li>
+      <li>Very salty food: helps keep blood pressure and water retention in check</li>
+    </ul></div>
+  </section>
+
+  <section><h3>Recovery and sleep</h3>
+    <div class="plain"><ul>
+      <li><b>Sleep 7–9 hours.</b> This is when muscle actually grows. Same bedtime every night.</li>
+      <li><b>8,000–10,000 steps a day</b>, including gym days.</li>
+      <li><b>Water:</b> 3–4 litres; more on hot or sweaty days.</li>
+      <li><b>Sore for more than 3 days, or joints aching?</b> Take an extra rest day or start the deload early.</li>
+    </ul></div>
+  </section>
+
+  <section><h3>Health and safety</h3>
+    <div class="note"><b>This plan doesn't include any doses or advice on how to run a cycle.</b> Steroids and other performance drugs carry real risks to the heart, liver, hormones and mood. In India they are prescription-only. If you go ahead, do it under a doctor (endocrinologist or sports medicine) who knows, and get blood work done.</div>
+    <div class="tbl"><table><thead><tr><th>When</th><th>Blood tests to ask your doctor for</th></tr></thead><tbody>
+      <tr><td>Before starting</td><td>CBC (haemoglobin, haematocrit), lipid profile, liver function (LFT), kidney function (KFT), fasting sugar / HbA1c, thyroid, total and free testosterone, LH, FSH, estradiol, prolactin</td></tr>
+      <tr><td>About 6 weeks in</td><td>CBC, lipid profile, LFT, KFT, estradiol, blood pressure check</td></tr>
+      <tr><td>6–8 weeks after finishing</td><td>Full panel again to confirm hormones and organs are back to normal</td></tr>
+    </tbody></table></div>
+    <div class="plain"><ul>
+      <li><b>Blood pressure at home every week.</b> See a doctor if it's above 140/90 more than once.</li>
+      <li><b>Stop and get checked straight away</b> for chest pain, shortness of breath, yellow eyes or skin, dark urine, bad headaches, or big mood changes.</li>
+      <li><b>Tendons and the elbow:</b> muscles get stronger faster than tendons, so injury risk goes up. Follow the slow progression and the elbow pain rule.</li>
+      <li><b>Track</b> weight and waist weekly, photos every 2 weeks, and how the left elbow feels after each session.</li>
+    </ul></div>
+  </section>
+  </div>`;
+}
+function bindCalc(){
+  const bw = document.getElementById("bw");
+  bw.value = store.get("v2-bw", 75);
+  const calc = () => {
+    const w = parseFloat(bw.value);
+    const ok = w >= 35 && w <= 200;
+    const k = w * 31, p = w * 2.1, f = w * 0.9, c = (k - p*4 - f*9) / 4;
+    document.getElementById("kcal").textContent = ok ? `${Math.round(w*30/50)*50}–${Math.round(w*32/50)*50}` : "–";
+    document.getElementById("prot").textContent = ok ? `${Math.round(w*2)}–${Math.round(w*2.2)} g` : "–";
+    document.getElementById("fat").textContent = ok ? `${Math.round(f)} g` : "–";
+    document.getElementById("carb").textContent = ok ? `~${Math.round(c/10)*10} g` : "–";
+    document.getElementById("water").textContent = ok ? `${(w*0.04).toFixed(1)} L` : "–";
+    if (ok) store.set("v2-bw", w);
+  };
+  bw.addEventListener("input", calc); calc();
+}
+
+const TABS = [...DAYS.map(d => ({id:d.id, label:d.d, sub:d.tag, c:COLOR[d.type]})), {id:"guide", label:"Guide", sub:"Diet & rules", c:"var(--fg)"}];
+function show(id){
+  document.querySelectorAll("nav.days button").forEach(b => b.setAttribute("aria-selected", b.dataset.id === id));
+  if (id === "guide") renderGuide(); else renderDay(DAYS.find(d => d.id === id));
+  store.set("v2-tab", id);
+  try{ history.replaceState(null, "", "#" + id); }catch(e){}
+  window.scrollTo({top:0});
+}
+const nav = document.getElementById("days");
+nav.innerHTML = TABS.map(t => `<button type="button" role="tab" data-id="${t.id}" style="--c:${t.c}">${t.label}<small>${t.sub}</small></button>`).join("");
+nav.addEventListener("click", e => { const b = e.target.closest("button"); if (b) show(b.dataset.id); });
+
+document.getElementById("view").addEventListener("click", e => {
+  const s = e.target.closest(".set");
+  if (s){
+    const k = s.dataset.k, n = +s.dataset.s;
+    const arr = new Set(done[k] || []);
+    arr.has(n) ? arr.delete(n) : arr.add(n);
+    done[k] = [...arr]; store.set("v2-done", done);
+    s.setAttribute("aria-pressed", arr.has(n));
+    const c = document.getElementById("c-" + k);
+    c.classList.toggle("is-done", arr.size === c.querySelectorAll(".set").length);
+    return;
+  }
+  const r = e.target.closest(".rest-btn");
+  if (r) { startTimer(+r.dataset.rest); return; }
+  if (e.target.closest("#reset")){
+    const id = store.get("v2-tab", "mon");
+    Object.keys(done).forEach(k => { if (k.startsWith(id + "-")) delete done[k]; });
+    store.set("v2-done", done); show(id);
+  }
+});
+
+let tEnd = 0, tInt = null;
+const tBox = document.getElementById("timer"), tLeft = document.getElementById("tleft");
+function tick(){
+  const s = Math.max(0, Math.round((tEnd - Date.now())/1000));
+  tLeft.textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  tBox.classList.toggle("zero", s === 0);
+  if (s === 0){ clearInterval(tInt); tInt = null; tLeft.textContent = "Go!"; try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+}
+function startTimer(sec){ tEnd = Date.now() + sec*1000; tBox.hidden = false; clearInterval(tInt); tInt = setInterval(tick, 250); tick(); }
+document.getElementById("tadd").onclick = () => { if (!tInt) { tEnd = Date.now(); tInt = setInterval(tick, 250); } tEnd += 30000; tick(); };
+document.getElementById("tstop").onclick = () => { clearInterval(tInt); tInt = null; tBox.hidden = true; };
+
+if (location.hash === "#print"){
+  document.documentElement.classList.add("print");
+  const v = document.getElementById("view");
+  const wk = DAYS.map(d => `<tr><td>${d.d}</td><td><b>${esc(d.title)}</b></td><td>${d.time}</td></tr>`).join("");
+  v.innerHTML = `<section class="pday pcover"><div class="block"><div class="eyebrow">This week</div><div class="tbl"><table><tbody>${wk}</tbody></table></div>
+      <p class="lede">Tap any <b>Watch video</b> link in this PDF to open a form tutorial on YouTube. Tick the circles with a pen, or use the phone version to track sets and rest.</p></div></section>`
+    + DAYS.map(d => `<section class="pday" style="--c:${COLOR[d.type]}">${dayHTML(d)}</section>`).join("")
+    + `<section class="pday" style="--c:var(--pull)">${guideHTML()}</section>`;
+  v.querySelectorAll("details.swap").forEach(d => d.open = true);
+  bindCalc();
+} else {
+const today = ["sun","mon","tue","wed","thu","fri","sat"][new Date().getDay()];
+const fromHash = (location.hash || "").slice(1);
+show(TABS.some(t => t.id === fromHash) ? fromHash : today);
+}
+</script>
+
+</body>
+</html>
